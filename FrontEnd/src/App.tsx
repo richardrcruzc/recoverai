@@ -12,7 +12,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Reminders from './pages/Reminders';
 import Payments from './pages/Payments';
 import Reports from './pages/Reports';
-
+import Scoring from './pages/Scoring';  
+import Demo from './pages/Demo';
+import Onboarding from './pages/Onboarding';
 
 export default function App() {
   return (
@@ -20,15 +22,17 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/thank-you" element={<ThankYou />} />
       <Route path="/login" element={<Login />} />
-
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/demo" element={<Demo />} />
+      <Route path="/onboarding" element={<Onboarding />} />
+   
+     <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/admin/users"
@@ -104,6 +108,14 @@ export default function App() {
   element={
     <ProtectedRoute>
       <Reports />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/scoring"
+  element={
+    <ProtectedRoute>
+      <Scoring />
     </ProtectedRoute>
   }
 />

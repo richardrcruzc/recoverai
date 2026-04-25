@@ -8,6 +8,7 @@ public class CollectFlowDbContext : DbContext
     public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
     {
     }
+    public DbSet<InvoiceScore> InvoiceScores => Set<InvoiceScore>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ReminderLog> ReminderLogs => Set<ReminderLog>();
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
@@ -125,6 +126,28 @@ public class CollectFlowDbContext : DbContext
             entity.Property(x => x.Currency).HasMaxLength(3).IsRequired();
             entity.Property(x => x.ReferenceNumber).HasMaxLength(100);
             entity.Property(x => x.Notes).HasMaxLength(2000);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<InvoiceScore>(entity =>
+        {
+            entity.ToTable("InvoiceScores");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Score).IsRequired();
+            entity.Property(x => x.Priority).HasConversion<int>().IsRequired();
+            entity.Property(x => x.Balance).HasColumnType("decimal(18,2)");
+            entity.Property(x => x.Reason).HasMaxLength(2000);
+
+            entity.HasIndex(x => x.InvoiceId).IsUnique();
 
             entity.HasOne(x => x.Invoice)
                 .WithMany()

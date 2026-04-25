@@ -12,7 +12,8 @@ export default function Dashboard() {
     ['Invoices', 'Track unpaid invoices, balances, and aging status.', '/invoices'],
     ['Workflows', 'Coming next: automate reminders and escalation logic.', '#'],
     ['Reminders', 'Run overdue invoice reminders and review reminder logs.', '/reminders'],
-    ['Payments', 'Record collections and update invoice balances.', '/payments']
+    ['Payments', 'Record collections and update invoice balances.', '/payments'],
+    ['Scoring', 'Prioritize invoices by collection risk and recovery opportunity.', '/scoring']
   ];
 
   return (

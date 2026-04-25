@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/recoverai-logo.svg';
-import { isAuthenticated, logout } from '../lib/auth';
+import { getToken, logout } from '../lib/auth';
 
 export default function Header() {
   const navigate = useNavigate();
-  const authenticated = isAuthenticated();
+  const isLoggedIn = !!getToken();
 
   const handleLogout = () => {
     logout();
@@ -23,19 +23,25 @@ export default function Header() {
         </Link>
 
         <nav className="hidden gap-6 text-sm md:flex">
-          <Link to="/dashboard" className="hover:text-slate-600">Dashboard</Link>
-          <Link to="/admin/users" className="hover:text-slate-600">Admin User</Link>
-          <Link to="/leads" className="hover:text-slate-600">Leads Admin</Link>
-          <Link to="/customers" className="hover:text-slate-600">Customers</Link>
-          <Link to="/invoices" className="hover:text-slate-600">Invoices</Link>
-          <Link to="/reminders" className="hover:text-slate-600">Reminders</Link>
-          <Link to="/payments" className="hover:text-slate-600">Payments</Link>
-          <Link to="/reports">Reports</Link>
-          <a href="/#pricing" className="hover:text-slate-600">Pricing</a>
+          <Link to="/#pricing" className="hover:text-slate-600">Pricing</Link>
+          <Link to="/demo" className="hover:text-slate-600">Try Demo</Link>
+          <Link to="/Onboarding" className="hover:text-slate-600">Onboarding</Link>
+
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard" className="hover:text-slate-600">Dashboard</Link>
+              <Link to="/customers" className="hover:text-slate-600">Customers</Link>
+              <Link to="/invoices" className="hover:text-slate-600">Invoices</Link>
+              <Link to="/payments" className="hover:text-slate-600">Payments</Link>
+              <Link to="/reminders" className="hover:text-slate-600">Reminders</Link>
+              <Link to="/reports" className="hover:text-slate-600">Reports</Link>
+              <Link to="/scoring" className="hover:text-slate-600">Scoring</Link>
+            </>
+          ) : null}
         </nav>
 
         <div className="flex items-center gap-3">
-          {authenticated ? (
+          {isLoggedIn ? (
             <button
               type="button"
               onClick={handleLogout}
@@ -52,12 +58,12 @@ export default function Header() {
             </Link>
           )}
 
-          <a
-            href="/#cta"
+          <Link
+            to={isLoggedIn ? '/dashboard' : '/onboarding'}
             className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
           >
-            Book a Demo
-          </a>
+            {isLoggedIn ? 'Open App' : 'Start Setup'}
+          </Link>
         </div>
       </div>
     </header>
