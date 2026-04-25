@@ -9,7 +9,7 @@ export default function Dashboard() {
 
   const productModules = [
     ['Customers', 'Manage customer records and contacts.', '/customers'],
-    ['Invoices', 'Coming next: track unpaid invoices and aging buckets.', '#'],
+    ['Invoices', 'Track unpaid invoices, balances, and aging status.', '/invoices'],
     ['Workflows', 'Coming next: automate reminders and escalation logic.', '#']
   ];
 

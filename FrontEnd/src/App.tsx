@@ -6,6 +6,7 @@ import Leads from './pages/Leads';
 import LeadDetail from './pages/LeadDetail';
 import AdminUsers from './pages/AdminUsers';
 import Customers from './pages/Customers';
+import Invoices from './pages/Invoices';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -30,6 +31,15 @@ export default function App() {
         element={
           <ProtectedRoute>
             <AdminUsers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/invoices"
+        element={
+          <ProtectedRoute>
+            <Invoices />
           </ProtectedRoute>
         }
       />
