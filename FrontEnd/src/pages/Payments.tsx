@@ -160,10 +160,10 @@ export default function Payments() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <div>
           <p className="text-sm font-medium uppercase tracking-wide text-slate-500">Recovery Module</p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight">Payments</h1>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">Payments</h1>
           <p className="mt-3 max-w-2xl text-slate-600">
             Record payments against invoices and update invoice balances automatically.
           </p>

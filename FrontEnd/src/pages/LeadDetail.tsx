@@ -28,17 +28,17 @@ export default function LeadDetail() {
     finally { setSaving(false); }
   };
 
-  if (loading) return <div className="min-h-screen bg-slate-50 text-slate-900"><Header /><main className="mx-auto max-w-5xl px-6 py-10">Loading lead...</main></div>;
-  if (!lead) return <div className="min-h-screen bg-slate-50 text-slate-900"><Header /><main className="mx-auto max-w-5xl px-6 py-10"><p>Lead not found.</p><button onClick={() => navigate('/leads')} className="mt-4 rounded-2xl bg-slate-900 px-5 py-3 text-sm text-white">Back to Leads</button></main></div>;
+  if (loading) return <div className="min-h-screen bg-slate-50 text-slate-900"><Header /><main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">Loading lead...</main></div>;
+  if (!lead) return <div className="min-h-screen bg-slate-50 text-slate-900"><Header /><main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10"><p>Lead not found.</p><button onClick={() => navigate('/leads')} className="mt-4 rounded-2xl bg-slate-900 px-5 py-3 text-sm text-white">Back to Leads</button></main></div>;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <Link to="/leads" className="text-sm text-slate-600 hover:text-slate-900">← Back to leads</Link>
         <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <div className="flex flex-col justify-between gap-6 md:flex-row">
-            <div><p className="text-sm font-medium uppercase tracking-wide text-slate-500">Lead Detail</p><h1 className="mt-2 text-4xl font-semibold tracking-tight">{lead.company}</h1><p className="mt-3 text-slate-600">{lead.name} · {lead.email}</p></div>
+            <div><p className="text-sm font-medium uppercase tracking-wide text-slate-500">Lead Detail</p><h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">{lead.company}</h1><p className="mt-3 text-slate-600">{lead.name} · {lead.email}</p></div>
             <div className="min-w-[260px] rounded-3xl bg-slate-50 p-5">
               <label className="text-sm font-medium text-slate-600">Status</label>
               <select value={status} onChange={(e) => setStatus(e.target.value)} className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm">{statuses.map((item) => <option key={item}>{item}</option>)}</select>

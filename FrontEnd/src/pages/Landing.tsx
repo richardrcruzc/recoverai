@@ -16,7 +16,7 @@ export default function Landing() {
         <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center">
           <div>
             <div className="mb-4 inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm">Built for agencies, consultants, and B2B service firms</div>
-            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight md:text-6xl">Stop chasing unpaid invoices. Get paid automatically.</h1>
+            <h1 className="max-w-2xl text-3xl sm:text-4xl font-semibold tracking-tight md:text-6xl">Stop chasing unpaid invoices. Get paid automatically.</h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">RecoverAI helps service businesses collect overdue invoices with automated follow-ups, smart prioritization, and payment-ready workflows.</p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a href="#cta" className="rounded-2xl bg-slate-900 px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90">Book a Demo</a>
@@ -65,7 +65,7 @@ export default function Landing() {
         <section id="pricing" className="mx-auto max-w-7xl px-6 py-20">
           <div className="max-w-2xl">
             <div className="text-sm font-medium uppercase tracking-wide text-slate-500">Pricing</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">Simple pricing that pays for itself with one recovered invoice.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-3xl sm:text-4xl">Simple pricing that pays for itself with one recovered invoice.</h2>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {pricing.map((plan) => (
@@ -83,7 +83,7 @@ export default function Landing() {
           <div className="rounded-[2rem] bg-slate-900 p-8 text-white shadow-2xl md:p-12">
             <div className="max-w-3xl">
               <div className="text-sm font-medium uppercase tracking-wide text-slate-400">Early access</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">Stop leaving money on the table.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-3xl sm:text-4xl">Stop leaving money on the table.</h2>
               <p className="mt-4 text-lg leading-8 text-slate-300">Book a demo and we’ll show you how to turn overdue invoices into a repeatable cash collection workflow.</p>
             </div>
             <LeadForm />

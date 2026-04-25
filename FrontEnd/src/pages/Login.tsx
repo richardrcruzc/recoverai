@@ -47,7 +47,7 @@ export default function Login() {
       <main className="mx-auto flex min-h-[calc(100vh-73px)] max-w-xl items-center px-6 py-16">
         <section className="w-full rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl">
           <p className="text-sm font-medium uppercase tracking-wide text-slate-500">Admin Access</p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight">Sign in</h1>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">Sign in</h1>
           <p className="mt-3 text-slate-600">
             Dashboard and leads are protected by backend JWT authentication.
           </p>

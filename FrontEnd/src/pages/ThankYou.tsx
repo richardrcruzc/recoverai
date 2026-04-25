@@ -12,7 +12,7 @@ export default function ThankYou() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"><CheckCircle2 className="h-8 w-8" /></div>
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">Request received</p>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Thanks, you’re in.</h1>
+            <h1 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight md:text-5xl">Thanks, you’re in.</h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">We captured your request and will follow up to schedule a demo.</p>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

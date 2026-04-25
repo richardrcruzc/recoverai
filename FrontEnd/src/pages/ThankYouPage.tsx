@@ -9,7 +9,7 @@ export default function ThankYouPage() {
             <span className="text-3xl">✓</span>
           </div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">Request received</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Thanks, you’re in.</h1>
+          <h1 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight md:text-5xl">Thanks, you’re in.</h1>
           <p className="mt-5 text-lg leading-8 text-slate-600">
             We captured your request and will follow up to schedule a demo. You can also book time now.
           </p>

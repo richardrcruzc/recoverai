@@ -13,13 +13,13 @@ export default function Pricing() {
       </header>
 
       <main className="max-w-5xl mx-auto py-16 px-6 text-center">
-        <h1 className="text-4xl font-bold">Pricing</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold">Pricing</h1>
 
         <div className="grid md:grid-cols-2 gap-8 mt-12">
 
           <div className="bg-white p-8 rounded-3xl shadow">
             <h2 className="text-2xl font-semibold">Starter</h2>
-            <p className="text-4xl mt-4 font-bold">$49/mo</p>
+            <p className="text-3xl sm:text-4xl mt-4 font-bold">$49/mo</p>
 
             <ul className="mt-6 text-left space-y-2 text-slate-600">
               <li>Invoices & reminders</li>
@@ -37,7 +37,7 @@ export default function Pricing() {
 
           <div className="bg-white p-8 rounded-3xl shadow border-2 border-slate-900">
             <h2 className="text-2xl font-semibold">Pro</h2>
-            <p className="text-4xl mt-4 font-bold">$99/mo + %</p>
+            <p className="text-3xl sm:text-4xl mt-4 font-bold">$99/mo + %</p>
 
             <ul className="mt-6 text-left space-y-2 text-slate-600">
               <li>AI scoring engine</li>

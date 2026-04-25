@@ -21,13 +21,13 @@ export default function Demo() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
               Public Demo
             </p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">
+            <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
               RecoverAI Demo Dashboard
             </h1>
             <p className="mt-3 max-w-2xl text-slate-600">
