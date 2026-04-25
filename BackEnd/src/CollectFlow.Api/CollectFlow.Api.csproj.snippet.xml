@@ -1,0 +1,2 @@
+<!-- Add this package reference inside CollectFlow.Api.csproj ItemGroup -->
+<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />

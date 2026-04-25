@@ -25,3 +25,24 @@ Endpoints used:
 - `POST /api/leads`
 - `GET /api/leads`
 - `PATCH /api/leads/{id}/status`
+
+
+## Protected routes
+
+These routes require login:
+
+```text
+/dashboard
+/admin/users
+/leads
+/leads/:id
+```
+
+Demo login:
+
+```text
+admin@recoverai.net
+admin123
+```
+
+This is frontend-only demo protection using `localStorage`. For production, replace it with backend JWT authentication.

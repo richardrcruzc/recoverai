@@ -1,7 +1,9 @@
 using CollectFlow.Application.Interfaces;
+using CollectFlow.Domain.Entities;
 using CollectFlow.Infrastructure.Options;
 using CollectFlow.Infrastructure.Persistence;
 using CollectFlow.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,10 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, SmtpEmailService>();
         services.AddScoped<ILeadService, LeadService>();
+
+        services.AddScoped<IAdminUserService, AdminUserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<PasswordHasher<AdminUser>>();
 
         return services;
     }

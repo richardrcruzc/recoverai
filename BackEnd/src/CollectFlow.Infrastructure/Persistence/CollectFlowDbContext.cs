@@ -1,5 +1,5 @@
 using CollectFlow.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; 
 
 namespace CollectFlow.Infrastructure.Persistence;
 
@@ -8,7 +8,7 @@ public class CollectFlowDbContext : DbContext
     public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
     {
     }
-
+    public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<Lead> Leads => Set<Lead>();
     public DbSet<Customer> Customers => Set<Customer>();
@@ -76,6 +76,17 @@ public class CollectFlowDbContext : DbContext
                 .WithMany(x => x.Invoices)
                 .HasForeignKey(x => x.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<AdminUser>(entity =>
+        {
+            entity.ToTable("AdminUsers");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.FullName).HasMaxLength(150).IsRequired();
+            entity.Property(x => x.Email).HasMaxLength(256).IsRequired();
+            entity.Property(x => x.PasswordHash).HasMaxLength(1000).IsRequired();
+            entity.Property(x => x.Role).HasConversion<int>().IsRequired();
+            entity.HasIndex(x => x.Email).IsUnique();
         });
     }
 }

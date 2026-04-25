@@ -1,5 +1,6 @@
 using CollectFlow.Application.DTOs.Leads;
 using CollectFlow.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollectFlow.Api.Controllers;
@@ -15,7 +16,9 @@ public class LeadsController : ControllerBase
         _leadService = leadService;
     }
 
+    // Public endpoint. Landing page visitors can submit demo requests.
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(LeadResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateLeadRequest request, CancellationToken cancellationToken)
@@ -27,7 +30,9 @@ public class LeadsController : ControllerBase
         return CreatedAtAction(nameof(GetAll), new { id = result.Id }, result);
     }
 
+    // Protected endpoint. Admin users only.
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(typeof(IReadOnlyList<LeadResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
@@ -35,7 +40,9 @@ public class LeadsController : ControllerBase
         return Ok(result);
     }
 
+    // Protected endpoint. Admin users only.
     [HttpPatch("{id:guid}/status")]
+    [Authorize]
     public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateLeadStatusRequest request, CancellationToken cancellationToken)
     {
         var updated = await _leadService.UpdateStatusAsync(id, request.Status, cancellationToken);
