@@ -28,6 +28,8 @@ public static class DependencyInjection
         services.AddScoped<PasswordHasher<AdminUser>>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IInvoiceService, InvoiceService>();
+        services.AddScoped<IReminderService, ReminderService>();
+
 
         return services;
     }

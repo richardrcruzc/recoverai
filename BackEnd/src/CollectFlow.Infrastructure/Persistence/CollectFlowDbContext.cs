@@ -8,6 +8,7 @@ public class CollectFlowDbContext : DbContext
     public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
     {
     }
+    public DbSet<ReminderLog> ReminderLogs => Set<ReminderLog>();
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<Lead> Leads => Set<Lead>();
@@ -87,6 +88,32 @@ public class CollectFlowDbContext : DbContext
             entity.Property(x => x.PasswordHash).HasMaxLength(1000).IsRequired();
             entity.Property(x => x.Role).HasConversion<int>().IsRequired();
             entity.HasIndex(x => x.Email).IsUnique();
+        });
+
+        modelBuilder.Entity<ReminderLog>(entity =>
+        {
+            entity.ToTable("ReminderLogs");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Channel).HasMaxLength(50).IsRequired();
+            entity.Property(x => x.Subject).HasMaxLength(200).IsRequired();
+            entity.Property(x => x.Body).HasMaxLength(2000).IsRequired();
+            entity.Property(x => x.Status).HasConversion<int>().IsRequired();
+            entity.Property(x => x.ErrorMessage).HasMaxLength(1000);
+
+            //entity.HasOne(x => x.Tenant)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.TenantId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
