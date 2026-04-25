@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Leads from './pages/Leads';
 import LeadDetail from './pages/LeadDetail';
 import AdminUsers from './pages/AdminUsers';
+import Customers from './pages/Customers';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -29,6 +30,15 @@ export default function App() {
         element={
           <ProtectedRoute>
             <AdminUsers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute>
+            <Customers />
           </ProtectedRoute>
         }
       />
