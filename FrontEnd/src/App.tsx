@@ -10,6 +10,9 @@ import Invoices from './pages/Invoices';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Reminders from './pages/Reminders';
+import Payments from './pages/Payments';
+import Reports from './pages/Reports';
+
 
 export default function App() {
   return (
@@ -85,6 +88,22 @@ export default function App() {
   element={
     <ProtectedRoute>
       <Reminders />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/payments"
+  element={
+    <ProtectedRoute>
+      <Payments />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/reports"
+  element={
+    <ProtectedRoute>
+      <Reports />
     </ProtectedRoute>
   }
 />

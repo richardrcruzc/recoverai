@@ -29,6 +29,8 @@ export default function Header() {
           <Link to="/customers" className="hover:text-slate-600">Customers</Link>
           <Link to="/invoices" className="hover:text-slate-600">Invoices</Link>
           <Link to="/reminders" className="hover:text-slate-600">Reminders</Link>
+          <Link to="/payments" className="hover:text-slate-600">Payments</Link>
+          <Link to="/reports">Reports</Link>
           <a href="/#pricing" className="hover:text-slate-600">Pricing</a>
         </nav>
 

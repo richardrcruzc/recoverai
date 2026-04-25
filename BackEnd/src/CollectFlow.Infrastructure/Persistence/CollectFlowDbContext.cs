@@ -8,6 +8,7 @@ public class CollectFlowDbContext : DbContext
     public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
     {
     }
+    public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ReminderLog> ReminderLogs => Set<ReminderLog>();
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
@@ -104,6 +105,26 @@ public class CollectFlowDbContext : DbContext
             //    .WithMany()
             //    .HasForeignKey(x => x.TenantId)
             //    .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.ToTable("Payments");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Amount).HasColumnType("decimal(18,2)");
+            entity.Property(x => x.Currency).HasMaxLength(3).IsRequired();
+            entity.Property(x => x.ReferenceNumber).HasMaxLength(100);
+            entity.Property(x => x.Notes).HasMaxLength(2000);
 
             entity.HasOne(x => x.Invoice)
                 .WithMany()
