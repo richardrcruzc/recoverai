@@ -9,6 +9,7 @@ import Customers from './pages/Customers';
 import Invoices from './pages/Invoices';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import Reminders from './pages/Reminders';
 
 export default function App() {
   return (
@@ -70,6 +71,23 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/invoices"
+  element={
+    <ProtectedRoute>
+      <Invoices />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/reminders"
+  element={
+    <ProtectedRoute>
+      <Reminders />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 }
