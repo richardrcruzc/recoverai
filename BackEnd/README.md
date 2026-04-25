@@ -1,22 +1,11 @@
-# CollectFlow / RecoverAI .NET 10 SaaS Backend Starter
+# CollectFlow .NET 10 SaaS Backend Starter - Fixed Build
 
-ASP.NET Core Web API backend starter for an AI collections SaaS.
+This version fixes the build issue by keeping dependencies in the correct direction:
 
-## Features
-
-- .NET 10 Web API structure
-- Lead capture endpoint
-- Email notification to `info@recoverAI.net`
-- Confirmation email to prospect
-- EF Core DbContext
-- SQL Server-ready configuration
-- CORS for React/Vite frontend
-- Swagger/OpenAPI
-- Clean layered structure:
-  - Api
-  - Application
-  - Domain
-  - Infrastructure
+- Domain: entities and enums only
+- Application: DTOs and interfaces only
+- Infrastructure: EF Core, DbContext, email service, LeadService implementation
+- Api: controllers and dependency wiring
 
 ## Run
 
@@ -32,22 +21,7 @@ Swagger:
 https://localhost:7001/swagger
 ```
 
-## Configure appsettings
-
-Edit:
-
-```text
-src/CollectFlow.Api/appsettings.Development.json
-```
-
-Set:
-
-- database connection string
-- SMTP settings
-
-## Create database
-
-From the solution root:
+## Database
 
 ```bash
 dotnet tool install --global dotnet-ef
@@ -55,27 +29,8 @@ dotnet ef migrations add InitialCreate --project src/CollectFlow.Infrastructure 
 dotnet ef database update --project src/CollectFlow.Infrastructure --startup-project src/CollectFlow.Api
 ```
 
-## React frontend endpoint
-
-Your React form should post to:
+## Endpoint
 
 ```text
 POST https://localhost:7001/api/leads
 ```
-
-Example body:
-
-```json
-{
-  "name": "Jane Smith",
-  "email": "jane@company.com",
-  "phone": "555-111-2222",
-  "company": "Acme Studio",
-  "invoiceVolume": "15 invoices / $25k overdue",
-  "biggestProblem": "Clients pay late and reminders are inconsistent"
-}
-```
-
-## Important
-
-This starter uses SMTP for email. You can replace it with SendGrid, Resend, Mailgun, or Microsoft Graph later.

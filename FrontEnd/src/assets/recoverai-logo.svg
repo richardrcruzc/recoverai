@@ -2,7 +2,5 @@
   <rect width="260" height="60" rx="12" fill="#0F172A"/>
   <circle cx="35" cy="30" r="14" fill="#22C55E"/>
   <path d="M28 30 L34 36 L44 24" stroke="#0F172A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="65" y="36" font-family="Inter, Arial, sans-serif" font-size="20" fill="#FFFFFF" font-weight="600">
-    RecoverAI
-  </text>
+  <text x="65" y="36" font-family="Inter, Arial, sans-serif" font-size="20" fill="#FFFFFF" font-weight="600">RecoverAI</text>
 </svg>

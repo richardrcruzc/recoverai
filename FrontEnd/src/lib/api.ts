@@ -1,30 +1,34 @@
-import { supabase } from '@/lib/supabase';
-import type { LeadFormValues } from '@/lib/types';
+import type { Lead, LeadFormValues } from '../types';
 
-export async function submitLead(values: LeadFormValues) {
-  if (!supabase) {
-    throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.');
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options?.headers ?? {}) }
+  });
+
+  if (!response.ok) {
+    let message = `Request failed with status ${response.status}`;
+    try {
+      const data = await response.json();
+      message = data.message ?? message;
+    } catch {}
+    throw new Error(message);
   }
 
-  const payload = {
-    name: values.name,
-    email: values.email,
-    phone: values.phone || null,
-    company: values.company,
-    invoice_volume: values.invoiceVolume,
-    biggest_problem: values.biggestProblem,
-    source: 'recoverai-landing-page',
-  };
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
+}
 
-  const { error } = await supabase.from('leads').insert(payload);
-  if (error) throw error;
+export async function submitLead(values: LeadFormValues): Promise<Lead> {
+  return request<Lead>('/api/leads', { method: 'POST', body: JSON.stringify(values) });
+}
 
-  const webhookUrl = import.meta.env.VITE_LEAD_NOTIFICATION_WEBHOOK_URL as string | undefined;
-  if (webhookUrl) {
-    await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-  }
+export async function getLeads(): Promise<Lead[]> {
+  return request<Lead[]>('/api/leads');
+}
+
+export async function updateLeadStatus(id: string, status: string): Promise<void> {
+  await request<void>(`/api/leads/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
 }

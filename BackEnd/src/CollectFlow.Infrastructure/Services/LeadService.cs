@@ -7,7 +7,7 @@ using CollectFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace CollectFlow.Application.Services;
+namespace CollectFlow.Infrastructure.Services;
 
 public class LeadService : ILeadService
 {
