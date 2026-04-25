@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
+using Hangfire;
+using Hangfire.SqlServer;
+using CollectFlow.Application.Interfaces;
+using CollectFlow.Application.DTOs.Reminders;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -59,6 +65,21 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHangfire(config =>
+{
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            new SqlServerStorageOptions
+            {
+                PrepareSchemaIfNecessary = true
+            });
+});
+
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -78,7 +99,18 @@ app.UseCors("Frontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
+
+RecurringJob.AddOrUpdate<IReminderService>(
+    "daily-overdue-invoice-reminders",
+    service => service.RunAsync(
+        new RunReminderRequest
+        {
+            MinimumDaysOverdue = 1,
+            SendEmails = true
+        },
+        CancellationToken.None),
+    "0 8 * * *");
 
 app.Run();
