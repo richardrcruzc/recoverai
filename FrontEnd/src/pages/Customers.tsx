@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Header from '../components/Header';
 import { createCustomer, getCustomers } from '../lib/customersApi';
 import type { CreateCustomerRequest, Customer } from '../types/customer';
+import UpgradeModal from '../components/UpgradeModal';
+import { isPaywallError } from '../lib/paywall';
 
 const DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 
@@ -32,6 +34,8 @@ export default function Customers() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+const [upgradeMessage, setUpgradeMessage] = useState('');
 
   const metrics = useMemo(() => {
     return {
@@ -86,7 +90,12 @@ export default function Customers() {
       setMessage('Customer created.');
       await loadCustomers();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not create customer.');
+      if (isPaywallError(err)) {
+        setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+        setUpgradeOpen(true);
+      } else {
+        setError(err instanceof Error ? err.message : 'Could not create customer.');
+      }
     } finally {
       setSaving(false);
     }
@@ -256,6 +265,11 @@ export default function Customers() {
             )}
           </div>
         </section>
+        <UpgradeModal
+  open={upgradeOpen}
+  message={upgradeMessage}
+  onClose={() => setUpgradeOpen(false)}
+/>
       </main>
     </div>
   );

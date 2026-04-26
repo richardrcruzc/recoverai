@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { getScores, runScoring } from '../lib/scoringApi';
 import type { InvoiceScore, RunScoringResponse } from '../types/scoring';
+import UpgradeModal from '../components/UpgradeModal';
+import { isPaywallError } from '../lib/paywall';
 
 function normalizePriority(priority: string | number): string {
   if (typeof priority === 'string') return priority;
@@ -43,6 +45,8 @@ export default function Scoring() {
   const [result, setResult] = useState<RunScoringResponse | null>(null);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+const [upgradeMessage, setUpgradeMessage] = useState('');
 
   const metrics = useMemo(() => {
     return {
@@ -63,7 +67,12 @@ export default function Scoring() {
       const data = await getScores();
       setScores(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not load scores.');
+         if (isPaywallError(err)) {
+    setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+    setUpgradeOpen(true);
+  } else {
+    setError(err instanceof Error ? err.message : 'Operation failed.');
+  }
     } finally {
       setLoading(false);
     }
@@ -85,7 +94,12 @@ export default function Scoring() {
       setMessage('Scoring completed.');
       await loadScores();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not run scoring.');
+      if (isPaywallError(err)) {
+    setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+    setUpgradeOpen(true);
+  } else {
+    setError(err instanceof Error ? err.message : 'Operation failed.');
+  }
     } finally {
       setRunning(false);
     }
@@ -241,6 +255,11 @@ export default function Scoring() {
             </div>
           )}
         </div>
+        <UpgradeModal
+  open={upgradeOpen}
+  message={upgradeMessage}
+  onClose={() => setUpgradeOpen(false)}
+/>
       </main>
     </div>
   );

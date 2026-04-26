@@ -4,6 +4,8 @@ import { getCustomers } from '../lib/customersApi';
 import { createInvoice, getInvoices, updateInvoiceStatus } from '../lib/invoicesApi';
 import type { Customer } from '../types/customer';
 import type { CreateInvoiceRequest, Invoice } from '../types/invoice';
+import UpgradeModal from '../components/UpgradeModal';
+import { isPaywallError } from '../lib/paywall';
 
 const DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 
@@ -62,6 +64,8 @@ export default function Invoices() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+const [upgradeMessage, setUpgradeMessage] = useState('');
 
   const metrics = useMemo(() => {
     const totalBalance = invoices.reduce((sum, invoice) => sum + Number(invoice.balance || 0), 0);
@@ -184,7 +188,12 @@ export default function Invoices() {
       setMessage('Invoice status updated.');
       await loadData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not update invoice status.');
+      if (isPaywallError(err)) {
+    setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+    setUpgradeOpen(true);
+  } else {
+    setError(err instanceof Error ? err.message : 'Operation failed.');
+  }
     }
   };
 
@@ -436,6 +445,11 @@ export default function Invoices() {
             )}
           </div>
         </section>
+        <UpgradeModal
+  open={upgradeOpen}
+  message={upgradeMessage}
+  onClose={() => setUpgradeOpen(false)}
+/>
       </main>
     </div>
   );

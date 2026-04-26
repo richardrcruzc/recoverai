@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Header from '../components/Header';
 import { getReminderLogs, runReminders } from '../lib/remindersApi';
 import type { ReminderLog, RunReminderResponse } from '../types/reminder';
+import UpgradeModal from '../components/UpgradeModal';
+import { isPaywallError } from '../lib/paywall';
 
 function normalizeStatus(status: string | number): string {
   if (typeof status === 'string') return status;
@@ -48,6 +50,9 @@ export default function Reminders() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+const [upgradeMessage, setUpgradeMessage] = useState('');
+
   const metrics = useMemo(() => {
     return {
       total: logs.length,
@@ -65,7 +70,12 @@ export default function Reminders() {
       const data = await getReminderLogs();
       setLogs(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not load reminder logs.');
+       if (isPaywallError(err)) {
+    setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+    setUpgradeOpen(true);
+  } else {
+    setError(err instanceof Error ? err.message : 'Operation failed.');
+  }
     } finally {
       setLoading(false);
     }
@@ -91,7 +101,12 @@ export default function Reminders() {
       setMessage('Reminder engine completed.');
       await loadLogs();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not run reminders.');
+       if (isPaywallError(err)) {
+    setUpgradeMessage(err instanceof Error ? err.message : 'Upgrade required.');
+    setUpgradeOpen(true);
+  } else {
+    setError(err instanceof Error ? err.message : 'Operation failed.');
+  }
     } finally {
       setRunning(false);
     }
@@ -254,6 +269,11 @@ export default function Reminders() {
             )}
           </div>
         </section>
+        <UpgradeModal
+  open={upgradeOpen}
+  message={upgradeMessage}
+  onClose={() => setUpgradeOpen(false)}
+/>
       </main>
     </div>
   );
