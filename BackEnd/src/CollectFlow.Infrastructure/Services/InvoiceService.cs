@@ -100,9 +100,9 @@ public class InvoiceService : IInvoiceService
         };
     }
 
-    public async Task<InvoiceResponse?> UpdateStatusAsync(Guid id, UpdateInvoiceStatusRequest request)
+    public async Task<InvoiceResponse?> UpdateStatusAsync(Guid id, UpdateInvoiceStatusRequest request, CancellationToken cancellationToken = default)
     {
-        var invoice = await _db.Invoices.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id);
+        var invoice = await _db.Invoices.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (invoice == null) return null;
 
         invoice.Status = request.Status;
@@ -110,8 +110,7 @@ public class InvoiceService : IInvoiceService
         if (request.Status == InvoiceStatus.Paid)
             invoice.Balance = 0;
 
-        await _db.SaveChangesAsync();
-
+        await _db.SaveChangesAsync(cancellationToken);
         return new InvoiceResponse
         {
             Id = invoice.Id,
