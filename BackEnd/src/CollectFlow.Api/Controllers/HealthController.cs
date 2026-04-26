@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CollectFlow.Api.Controllers;
 
@@ -6,6 +7,7 @@ namespace CollectFlow.Api.Controllers;
 [Route("api/[controller]")]
 public class HealthController : ControllerBase
 {
+    [EnableRateLimiting("public-forms")]
     [HttpGet]
     public IActionResult Get()
     {

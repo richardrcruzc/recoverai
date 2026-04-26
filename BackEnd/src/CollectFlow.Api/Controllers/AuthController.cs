@@ -4,6 +4,7 @@ using CollectFlow.Application.Interfaces;
 using CollectFlow.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace CollectFlow.Api.Controllers;
@@ -12,6 +13,7 @@ namespace CollectFlow.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthController(JwtTokenService jwtTokenService, IAuthService authService) : ControllerBase
 {
+    [EnableRateLimiting("public-forms")]
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)

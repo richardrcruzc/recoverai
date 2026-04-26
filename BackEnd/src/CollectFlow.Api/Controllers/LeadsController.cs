@@ -2,6 +2,7 @@ using CollectFlow.Application.DTOs.Leads;
 using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CollectFlow.Api.Controllers;
 
@@ -17,6 +18,7 @@ public class LeadsController : ControllerBase
     }
 
     // Public endpoint. Landing page visitors can submit demo requests.
+    [EnableRateLimiting("public-forms")]
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(LeadResponse), StatusCodes.Status201Created)]

@@ -5,6 +5,7 @@ using CollectFlow.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectFlow.Api.Controllers;
@@ -23,7 +24,7 @@ public class OnboardingController : ControllerBase
         _db = db;
         _passwordHasher = passwordHasher;
     }
-
+    [EnableRateLimiting("public-forms")]
     [HttpPost("tenant")]
     [AllowAnonymous]
     public async Task<IActionResult> CreateTenant(
