@@ -18,7 +18,8 @@ const appLinks = [
   { to: '/reminders', label: 'Reminders' },
   { to: '/reports', label: 'Reports' },
   { to: '/scoring', label: 'Scoring' },
-  { to: '/billing', label: 'Billing' }  
+  { to: '/billing', label: 'Billing' } ,
+   { to: '/email-automation', label: 'Email Automation' }  
 ];
 
 function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {

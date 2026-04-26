@@ -16,6 +16,7 @@ import Scoring from './pages/Scoring';
 import Demo from './pages/Demo';
 import Onboarding from './pages/Onboarding';
 import Billing from './pages/Billing';
+import EmailAutomation from './pages/EmailAutomation';
 
 export default function App() {
   return (
@@ -25,7 +26,16 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
-      
+
+<Route
+  path="/email-automation"
+  element={
+    <ProtectedRoute>
+      <EmailAutomation />
+    </ProtectedRoute>
+  }
+/>
+
    <Route
   path="/billing"
   element={
