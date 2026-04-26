@@ -3,6 +3,7 @@ using CollectFlow.Domain.Entities;
 using CollectFlow.Infrastructure.Options;
 using CollectFlow.Infrastructure.Persistence;
 using CollectFlow.Infrastructure.Services;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,7 @@ public static class DependencyInjection
         services.Configure<EmailOptions>(
     configuration.GetSection(EmailOptions.SectionName).Bind);
 
+        services.AddScoped<TenantContext>();
         services.AddDbContext<CollectFlowDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -33,6 +35,8 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IScoringService, ScoringService>();
         services.AddScoped<IBillingService, BillingService>();
+        
+         
 
 
         return services;

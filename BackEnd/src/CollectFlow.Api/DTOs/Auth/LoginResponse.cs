@@ -6,4 +6,5 @@ public class LoginResponse
     public DateTime ExpiresAtUtc { get; set; }
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = "Admin";
+    public Guid TenantId { get; set; }
 }

@@ -2,6 +2,7 @@ using CollectFlow.Application.DTOs.Customers;
 using CollectFlow.Application.Interfaces;
 using CollectFlow.Domain.Entities;
 using CollectFlow.Infrastructure.Persistence;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectFlow.Infrastructure.Services;
@@ -9,10 +10,12 @@ namespace CollectFlow.Infrastructure.Services;
 public class CustomerService : ICustomerService
 {
     private readonly CollectFlowDbContext _dbContext;
+    private readonly TenantContext _tenantContext;
 
-    public CustomerService(CollectFlowDbContext dbContext)
+    public CustomerService(CollectFlowDbContext dbContext, TenantContext tenantContext)
     {
         _dbContext = dbContext;
+        _tenantContext = tenantContext;
     }
 
     public async Task<IReadOnlyList<CustomerResponse>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -45,13 +48,15 @@ public class CustomerService : ICustomerService
 
     public async Task<CustomerResponse> CreateAsync(CreateCustomerRequest request, CancellationToken cancellationToken = default)
     {
-        var tenantExists = await _dbContext.Tenants.AnyAsync(x => x.Id == request.TenantId, cancellationToken);
+        var tenantId = _tenantContext.RequireTenantId();
+
+        var tenantExists = await _dbContext.Tenants.AnyAsync(x => x.Id == tenantId, cancellationToken);
         if (!tenantExists)
             throw new InvalidOperationException("Tenant not found.");
 
         var customer = new Customer
         {
-            TenantId = request.TenantId,
+            TenantId = _tenantContext.RequireTenantId(),
             Name = request.Name.Trim(),
             CompanyName = request.CompanyName.Trim(),
             Email = request.Email.Trim().ToLowerInvariant(),

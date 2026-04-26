@@ -1,20 +1,25 @@
 using CollectFlow.Domain.Entities;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.EntityFrameworkCore; 
 
 namespace CollectFlow.Infrastructure.Persistence;
 
 public class CollectFlowDbContext : DbContext
 {
-    public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
+    private readonly TenantContext _tenantContext;
+    public CollectFlowDbContext(
+         DbContextOptions<CollectFlowDbContext> options,
+         TenantContext tenantContext) : base(options)
     {
+        _tenantContext = tenantContext;
     }
+    public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<RecoveryFee> RecoveryFees => Set<RecoveryFee>();
     public DbSet<RevenueEvent> RevenueEvents => Set<RevenueEvent>();
     public DbSet<InvoiceScore> InvoiceScores => Set<InvoiceScore>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ReminderLog> ReminderLogs => Set<ReminderLog>();
-    public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
-    public DbSet<Tenant> Tenants => Set<Tenant>();
+    public DbSet<AdminUser> AdminUsers => Set<AdminUser>(); 
     public DbSet<Lead> Leads => Set<Lead>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
@@ -107,7 +112,32 @@ public class CollectFlowDbContext : DbContext
             entity.Property(x => x.PasswordHash).HasMaxLength(1000).IsRequired();
             entity.Property(x => x.Role).HasConversion<int>().IsRequired();
             entity.HasIndex(x => x.Email).IsUnique();
+
+            entity.HasOne(x => x.Tenant)
+                .WithMany()
+                .HasForeignKey(x => x.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
+        modelBuilder.Entity<Customer>().HasQueryFilter(x =>
+           !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<Invoice>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<Payment>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<ReminderLog>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<InvoiceScore>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<RecoveryFee>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<AdminUser>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
 
         modelBuilder.Entity<ReminderLog>(entity =>
         {

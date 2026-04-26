@@ -48,9 +48,10 @@ public class OnboardingController : ControllerBase
             Slug = slug,
             IsActive = true
         };
-
+ 
         var admin = new AdminUser
         {
+            TenantId = tenant.Id,
             FullName = request.AdminFullName.Trim(),
             Email = email,
             Role = AdminUserRole.Admin,

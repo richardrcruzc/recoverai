@@ -3,6 +3,7 @@ using CollectFlow.Application.Interfaces;
 using CollectFlow.Domain.Entities;
 using CollectFlow.Domain.Enums;
 using CollectFlow.Infrastructure.Persistence;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectFlow.Infrastructure.Services;
@@ -10,10 +11,12 @@ namespace CollectFlow.Infrastructure.Services;
 public class InvoiceService : IInvoiceService
 {
     private readonly CollectFlowDbContext _db;
+    private readonly TenantContext _tenantContext;
 
-    public InvoiceService(CollectFlowDbContext db)
+    public InvoiceService(CollectFlowDbContext db, TenantContext tenantContext)
     {
         _db = db;
+        _tenantContext = tenantContext; 
     }
 
     public async Task<IReadOnlyList<InvoiceResponse>> GetAllAsync(string? status = null)
@@ -50,9 +53,10 @@ public class InvoiceService : IInvoiceService
 
     public async Task<InvoiceResponse> CreateAsync(CreateInvoiceRequest request)
     {
+        var tenantId = _tenantContext.RequireTenantId();
         var invoice = new Invoice
         {
-            TenantId = request.TenantId,
+            TenantId = tenantId,
             CustomerId = request.CustomerId,
             InvoiceNumber = request.InvoiceNumber,
             IssueDate = request.IssueDate,
@@ -66,7 +70,7 @@ public class InvoiceService : IInvoiceService
         _db.Invoices.Add(invoice);
         _db.RevenueEvents.Add(new RevenueEvent
         {
-            TenantId = request.TenantId,
+            TenantId = tenantId,
             EventType = "InvoiceCreated"
         });
         await _db.SaveChangesAsync();

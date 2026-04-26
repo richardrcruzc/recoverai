@@ -17,23 +17,46 @@ public static class DbSeeder
 
         await dbContext.Database.MigrateAsync();
 
+        var tenantSlug = "recoverai-demo";
+
+        var tenant = await dbContext.Tenants
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Slug == tenantSlug);
+        if (tenant is null)
+        {
+            tenant = new Tenant
+            {
+                Name = "RecoverAI Demo",
+                Slug = tenantSlug,
+                IsActive = true
+            };
+
+            dbContext.Tenants.Add(tenant);
+            await dbContext.SaveChangesAsync();
+        }
+
+
         var adminEmail = "admin@recoverai.net";
 
-        var adminExists = await dbContext.AdminUsers.AnyAsync(x => x.Email == adminEmail);
-        if (adminExists)
-            return;
+        var adminExists = await dbContext.AdminUsers
+            .IgnoreQueryFilters()
+            .AnyAsync(x => x.Email == adminEmail);
 
-        var admin = new AdminUser
+        if (!adminExists)
         {
-            FullName = "RecoverAI Admin",
-            Email = adminEmail,
-            Role = AdminUserRole.Admin,
-            IsActive = true
-        };
+            var admin = new AdminUser
+            {
+                TenantId = tenant.Id,
+                FullName = "RecoverAI Admin",
+                Email = adminEmail,
+                Role = AdminUserRole.Admin,
+                IsActive = true
+            };
 
-        admin.PasswordHash = passwordHasher.HashPassword(admin, "admin123");
+            admin.PasswordHash = passwordHasher.HashPassword(admin, "admin123");
 
-        dbContext.AdminUsers.Add(admin);
-        await dbContext.SaveChangesAsync();
+            dbContext.AdminUsers.Add(admin);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

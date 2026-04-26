@@ -8,6 +8,7 @@ export type LoginResult = {
   expiresAtUtc: string;
   email: string;
   role: string;
+  tenantId: string;
 };
 
 export function getToken(): string | null {
@@ -45,7 +46,8 @@ export async function login(email: string, password: string): Promise<boolean> {
   localStorage.setItem(TOKEN_KEY, data.accessToken);
   localStorage.setItem(USER_KEY, JSON.stringify({
     email: data.email,
-    role: data.role
+    role: data.role,
+  tenantId: data.tenantId
   }));
 
   return true;

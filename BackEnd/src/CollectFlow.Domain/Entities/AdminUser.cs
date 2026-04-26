@@ -4,6 +4,9 @@ namespace CollectFlow.Domain.Entities;
 
 public class AdminUser : BaseEntity
 {
+    public Guid TenantId { get; set; }
+    public Tenant Tenant { get; set; } = default!;
+
     public string FullName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;

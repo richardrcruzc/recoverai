@@ -1,16 +1,16 @@
-using System.Text;
+using CollectFlow.Api.Middleware;
 using CollectFlow.Api.Options;
 using CollectFlow.Api.Services;
+using CollectFlow.Application.DTOs.Reminders;
+using CollectFlow.Application.Interfaces;
 using CollectFlow.Infrastructure;
 using CollectFlow.Infrastructure.Persistence;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-
-using Hangfire;
-using Hangfire.SqlServer;
-using CollectFlow.Application.Interfaces;
-using CollectFlow.Application.DTOs.Reminders;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,6 +98,7 @@ app.UseHttpsRedirection();
 app.UseCors("Frontend");
 
 app.UseAuthentication();
+app.UseMiddleware<TenantMiddleware>();
 app.UseAuthorization();
 app.UseHangfireDashboard("/hangfire");
 app.MapControllers();

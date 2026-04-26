@@ -1,6 +1,7 @@
 using CollectFlow.Api.DTOs.Auth;
 using CollectFlow.Api.Services;
 using CollectFlow.Application.Interfaces;
+using CollectFlow.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -23,7 +24,7 @@ public class AuthController(JwtTokenService jwtTokenService, IAuthService authSe
         if (!result.Success)
             return Unauthorized(new { message = "Invalid email or password." });
 
-        var token = jwtTokenService.CreateToken(result.Email, result.Role);
+        var token = jwtTokenService.CreateToken(result.Email, result.Role, result.TenantId);
         return Ok(token);
     }
 
@@ -42,10 +43,13 @@ public class AuthController(JwtTokenService jwtTokenService, IAuthService authSe
             User.FindFirstValue("role") ??
             "Admin";
 
+        var tenantId = User.FindFirstValue("tenantId") ?? string.Empty;
+
         return Ok(new
         {
             email,
             role,
+            tenantId,
             authenticated = User.Identity?.IsAuthenticated == true
         });
     }

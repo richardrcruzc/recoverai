@@ -17,7 +17,7 @@ public class JwtTokenService
         _options = options.Value;
     }
 
-    public LoginResponse CreateToken(string email, string role)
+    public LoginResponse CreateToken(string email, string role, Guid tenantId)
     {
         if (string.IsNullOrWhiteSpace(_options.Key) || _options.Key.Length < 32)
             throw new InvalidOperationException("JWT key must be configured and at least 32 characters long.");
@@ -30,7 +30,8 @@ public class JwtTokenService
             new(JwtRegisteredClaimNames.Email, email),
             new(ClaimTypes.Email, email),
             new(ClaimTypes.Role, role),
-            new("role", role)
+            new("role", role),
+            new("tenantId", tenantId.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
@@ -48,7 +49,8 @@ public class JwtTokenService
             AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
             ExpiresAtUtc = expires,
             Email = email,
-            Role = role
+            Role = role,
+            TenantId = tenantId
         };
     }
 }
