@@ -13,6 +13,9 @@ public class CollectFlowDbContext : DbContext
     {
         _tenantContext = tenantContext;
     }
+    public DbSet<CollectionAction> CollectionActions => Set<CollectionAction>();
+    public DbSet<CollectionActionLog> CollectionActionLogs => Set<CollectionActionLog>();
+    public DbSet<CollectionCallTask> CollectionCallTasks => Set<CollectionCallTask>();
     public DbSet<EmailAutomationJob> EmailAutomationJobs => Set<EmailAutomationJob>();
     public DbSet<TenantSubscription> TenantSubscriptions => Set<TenantSubscription>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
@@ -29,6 +32,81 @@ public class CollectFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<CollectionAction>(entity =>
+        {
+            entity.ToTable("CollectionActions");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.ActionType).HasConversion<int>().IsRequired();
+            entity.Property(x => x.Status).HasConversion<int>().IsRequired();
+
+            entity.Property(x => x.Title).HasMaxLength(300).IsRequired();
+            entity.Property(x => x.Message).HasMaxLength(4000);
+            entity.Property(x => x.Reason).HasMaxLength(2000);
+            entity.Property(x => x.ErrorMessage).HasMaxLength(2000);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<CollectionAction>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+        modelBuilder.Entity<CollectionActionLog>(entity =>
+        {
+            entity.ToTable("CollectionActionLogs");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.ActionType).HasConversion<int>().IsRequired();
+            entity.Property(x => x.Status).HasConversion<int>().IsRequired();
+            entity.Property(x => x.RuleKey).HasMaxLength(100).IsRequired();
+            entity.Property(x => x.Subject).HasMaxLength(300);
+            entity.Property(x => x.BodyHtml).HasMaxLength(8000);
+            entity.Property(x => x.ErrorMessage).HasMaxLength(2000);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<CollectionCallTask>(entity =>
+        {
+            entity.ToTable("CollectionCallTasks");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Reason).HasMaxLength(1000);
+            entity.Property(x => x.SuggestedScript).HasMaxLength(4000);
+            entity.Property(x => x.Status).HasConversion<int>().IsRequired();
+            entity.Property(x => x.Outcome).HasMaxLength(2000);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany()
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<CollectionActionLog>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+
+        modelBuilder.Entity<CollectionCallTask>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
 
         modelBuilder.Entity<EmailAutomationJob>(entity =>
         {

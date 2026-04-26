@@ -132,4 +132,9 @@ RecurringJob.AddOrUpdate<IEmailAutomationService>(
     service => service.RunDueJobsAsync(CancellationToken.None),
     "*/15 * * * *");
 
+RecurringJob.AddOrUpdate<ICollectionsEngineService>(
+    "daily-collections-engine",
+    service => service.RunAsync(CancellationToken.None),
+    "0 8 * * *");
+
 app.Run();

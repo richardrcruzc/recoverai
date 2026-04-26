@@ -17,6 +17,7 @@ import Demo from './pages/Demo';
 import Onboarding from './pages/Onboarding';
 import Billing from './pages/Billing';
 import EmailAutomation from './pages/EmailAutomation';
+import Collections from './pages/Collections';
 
 export default function App() {
   return (
@@ -27,6 +28,14 @@ export default function App() {
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
 
+<Route
+  path="/collections"
+  element={
+    <ProtectedRoute>
+      <Collections />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/email-automation"
   element={
