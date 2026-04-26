@@ -36,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IScoringService, ScoringService>();
         services.AddScoped<IBillingService, BillingService>();
         services.AddScoped<IPlanLimitService, PlanLimitService>();
+        services.AddScoped<IEmailAutomationService, EmailAutomationService>();
 
 
 

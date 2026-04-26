@@ -127,4 +127,9 @@ RecurringJob.AddOrUpdate<IReminderService>(
         CancellationToken.None),
     "0 8 * * *");
 
+RecurringJob.AddOrUpdate<IEmailAutomationService>(
+    "email-automation-due-jobs",
+    service => service.RunDueJobsAsync(CancellationToken.None),
+    "*/15 * * * *");
+
 app.Run();

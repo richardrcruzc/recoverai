@@ -14,15 +14,19 @@ public class LeadService : ILeadService
     private readonly CollectFlowDbContext _dbContext;
     private readonly IEmailService _emailService;
     private readonly EmailOptions _emailOptions;
+    private readonly IEmailAutomationService _emailAutomationService;
+
 
     public LeadService(
         CollectFlowDbContext dbContext,
         IEmailService emailService,
-        IOptions<EmailOptions> emailOptions)
+        IOptions<EmailOptions> emailOptions,
+        IEmailAutomationService emailAutomationService)
     {
         _dbContext = dbContext;
         _emailService = emailService;
         _emailOptions = emailOptions.Value;
+        _emailAutomationService = emailAutomationService;
     }
 
     public async Task<LeadResponse> CreateAsync(CreateLeadRequest request, CancellationToken cancellationToken = default)
@@ -43,6 +47,7 @@ public class LeadService : ILeadService
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         await SendLeadEmailsAsync(lead, cancellationToken);
+        await _emailAutomationService.QueueLeadSequenceAsync(lead.Id, cancellationToken);
 
         return Map(lead);
     }

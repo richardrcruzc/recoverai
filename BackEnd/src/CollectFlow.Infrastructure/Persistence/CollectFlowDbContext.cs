@@ -12,7 +12,8 @@ public class CollectFlowDbContext : DbContext
          TenantContext tenantContext) : base(options)
     {
         _tenantContext = tenantContext;
-    } 
+    }
+    public DbSet<EmailAutomationJob> EmailAutomationJobs => Set<EmailAutomationJob>();
     public DbSet<TenantSubscription> TenantSubscriptions => Set<TenantSubscription>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<RecoveryFee> RecoveryFees => Set<RecoveryFee>();
@@ -28,6 +29,35 @@ public class CollectFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<EmailAutomationJob>(entity =>
+        {
+            entity.ToTable("EmailAutomationJobs");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.CampaignKey).HasMaxLength(100).IsRequired();
+            entity.Property(x => x.RecipientEmail).HasMaxLength(256).IsRequired();
+            entity.Property(x => x.RecipientName).HasMaxLength(150);
+            entity.Property(x => x.Subject).HasMaxLength(300).IsRequired();
+            entity.Property(x => x.BodyHtml).HasMaxLength(8000).IsRequired();
+            entity.Property(x => x.Status).HasConversion<int>().IsRequired();
+            entity.Property(x => x.ErrorMessage).HasMaxLength(2000);
+
+            entity.HasOne(x => x.Lead)
+                .WithMany()
+                .HasForeignKey(x => x.LeadId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(x => x.AdminUser)
+                .WithMany()
+                .HasForeignKey(x => x.AdminUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<EmailAutomationJob>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant ||
+            x.TenantId == null ||
+            x.TenantId == _tenantContext.TenantId);
 
         modelBuilder.Entity<RevenueEvent>(entity =>
         {
