@@ -64,6 +64,11 @@ public class InvoiceService : IInvoiceService
         };
 
         _db.Invoices.Add(invoice);
+        _db.RevenueEvents.Add(new RevenueEvent
+        {
+            TenantId = request.TenantId,
+            EventType = "InvoiceCreated"
+        });
         await _db.SaveChangesAsync();
 
         return new InvoiceResponse

@@ -4,6 +4,7 @@ import { getInvoices } from '../lib/invoicesApi';
 import { createPayment, getPayments } from '../lib/paymentsApi';
 import type { Invoice } from '../types/invoice';
 import type { CreatePaymentRequest, Payment } from '../types/payment';
+import { useNavigate } from 'react-router-dom';
 
 const initialForm: CreatePaymentRequest = {
   invoiceId: '',
@@ -37,13 +38,44 @@ export default function Payments() {
   const [form, setForm] = useState<CreatePaymentRequest>(initialForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');   
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+  
+function money(value: number, currency = 'USD'): string {
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency
+  }).format(value || 0);
+}
   const openInvoices = useMemo(() => {
     return invoices.filter((invoice) => Number(invoice.balance) > 0);
   }, [invoices]);
+const totalRecovered = payments.reduce(
+  (sum, p) => sum + Number(p.amount || 0),
+  0
+);
 
+const showRecoveryBanner = totalRecovered > 1000;
+{showRecoveryBanner && (
+  <div className="mt-6 rounded-2xl bg-emerald-600 p-6 text-white">
+    <h3 className="text-lg font-semibold">
+      You recovered {money(totalRecovered)}
+    </h3>
+
+    <p className="mt-2 text-sm text-emerald-100">
+      Scale this with automated reminders and AI prioritization.
+    </p>
+
+    <button
+      onClick={() => navigate('/billing')}
+      className="mt-4 rounded-xl bg-white px-4 py-2 text-sm font-medium text-emerald-700"
+    >
+      Upgrade to Pro
+    </button>
+  </div>
+)}
   const metrics = useMemo(() => {
     const totalCollected = payments.reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
 

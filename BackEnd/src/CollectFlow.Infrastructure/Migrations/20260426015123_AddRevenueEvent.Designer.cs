@@ -4,6 +4,7 @@ using CollectFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(CollectFlowDbContext))]
-    partial class CollectFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260426015123_AddRevenueEvent")]
+    partial class AddRevenueEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,57 +345,6 @@ namespace CollectFlow.Infrastructure.Migrations
                     b.ToTable("Payments", (string)null);
                 });
 
-            modelBuilder.Entity("CollectFlow.Domain.Entities.RecoveryFee", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("BilledAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("FeeAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("FeeRate")
-                        .HasColumnType("decimal(5,4)");
-
-                    b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsBilled")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("RecoveredAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentId");
-
-                    b.ToTable("RecoveryFees", (string)null);
-                });
-
             modelBuilder.Entity("CollectFlow.Domain.Entities.ReminderLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -585,17 +537,6 @@ namespace CollectFlow.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Invoice");
-                });
-
-            modelBuilder.Entity("CollectFlow.Domain.Entities.RecoveryFee", b =>
-                {
-                    b.HasOne("CollectFlow.Domain.Entities.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("CollectFlow.Domain.Entities.ReminderLog", b =>

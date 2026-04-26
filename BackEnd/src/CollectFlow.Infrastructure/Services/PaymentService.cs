@@ -89,6 +89,7 @@ public class PaymentService : IPaymentService
         if (request.Amount > invoice.Balance)
             throw new InvalidOperationException("Payment amount cannot exceed invoice balance.");
 
+
         var payment = new Payment
         {
             TenantId = invoice.TenantId,
@@ -115,7 +116,22 @@ public class PaymentService : IPaymentService
         {
             invoice.Status = InvoiceStatus.PartiallyPaid;
         }
+        var feeRate = 0.03m;
 
+        var recoveryFee = new RecoveryFee
+        {
+            TenantId = invoice.TenantId,
+            PaymentId = payment.Id,
+            InvoiceId = invoice.Id,
+            CustomerId = invoice.CustomerId,
+            RecoveredAmount = payment.Amount,
+            FeeRate = feeRate,
+            FeeAmount = Math.Round(payment.Amount * feeRate, 2),
+            Currency = payment.Currency,
+            IsBilled = false
+        };
+
+        _db.RecoveryFees.Add(recoveryFee);
         _db.Payments.Add(payment);
         await _db.SaveChangesAsync(cancellationToken);
 

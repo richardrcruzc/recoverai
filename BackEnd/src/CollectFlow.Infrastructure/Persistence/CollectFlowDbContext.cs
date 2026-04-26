@@ -8,6 +8,8 @@ public class CollectFlowDbContext : DbContext
     public CollectFlowDbContext(DbContextOptions<CollectFlowDbContext> options) : base(options)
     {
     }
+    public DbSet<RecoveryFee> RecoveryFees => Set<RecoveryFee>();
+    public DbSet<RevenueEvent> RevenueEvents => Set<RevenueEvent>();
     public DbSet<InvoiceScore> InvoiceScores => Set<InvoiceScore>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ReminderLog> ReminderLogs => Set<ReminderLog>();
@@ -21,6 +23,21 @@ public class CollectFlowDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<RecoveryFee>(entity =>
+        {
+            entity.ToTable("RecoveryFees");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.RecoveredAmount).HasColumnType("decimal(18,2)");
+            entity.Property(x => x.FeeRate).HasColumnType("decimal(5,4)");
+            entity.Property(x => x.FeeAmount).HasColumnType("decimal(18,2)");
+            entity.Property(x => x.Currency).HasMaxLength(3).IsRequired();
+
+            entity.HasOne(x => x.Payment)
+                .WithMany()
+                .HasForeignKey(x => x.PaymentId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
         modelBuilder.Entity<Tenant>(entity =>
         {
             entity.ToTable("Tenants");

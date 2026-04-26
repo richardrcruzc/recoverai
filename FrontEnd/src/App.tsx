@@ -15,6 +15,7 @@ import Reports from './pages/Reports';
 import Scoring from './pages/Scoring';  
 import Demo from './pages/Demo';
 import Onboarding from './pages/Onboarding';
+import Billing from './pages/Billing';
 
 export default function App() {
   return (
@@ -24,7 +25,15 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
-   
+      
+   <Route
+  path="/billing"
+  element={
+    <ProtectedRoute>
+      <Billing />
+    </ProtectedRoute>
+  }
+/>
      <Route
   path="/dashboard"
   element={

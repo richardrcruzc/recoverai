@@ -15,4 +15,10 @@ public class Lead : BaseEntity
     public string BiggestProblem { get; set; } = string.Empty;
     public string Source { get; set; } = "landing-page";
     public LeadStatus Status { get; set; } = LeadStatus.New;
+    public string Stage { get; set; } = "New";
+    // New, Contacted, Qualified, Activated, Converted, Lost
+
+    public int Score { get; set; } = 0;
+
+    public DateTime? LastContactedAtUtc { get; set; }
 }
