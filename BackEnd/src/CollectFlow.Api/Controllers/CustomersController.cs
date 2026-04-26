@@ -1,3 +1,4 @@
+using CollectFlow.Application.Common;
 using CollectFlow.Application.DTOs.Customers;
 using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -39,10 +40,20 @@ public class CustomersController : ControllerBase
             var customer = await _customerService.CreateAsync(request, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
         }
+        catch (PaywallException ex)
+        {
+            return StatusCode(StatusCodes.Status402PaymentRequired, new
+            {
+                message = ex.Message,
+                feature = ex.Feature,
+                upgradeRequired = true
+            });
+        }
         catch (InvalidOperationException ex)
         {
             return BadRequest(new { message = ex.Message });
         }
+       
     }
 
     [HttpPatch("{id:guid}")]

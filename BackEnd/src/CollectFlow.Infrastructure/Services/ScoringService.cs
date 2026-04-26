@@ -3,6 +3,7 @@ using CollectFlow.Application.Interfaces;
 using CollectFlow.Domain.Entities;
 using CollectFlow.Domain.Enums;
 using CollectFlow.Infrastructure.Persistence;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectFlow.Infrastructure.Services;
@@ -10,14 +11,30 @@ namespace CollectFlow.Infrastructure.Services;
 public class ScoringService : IScoringService
 {
     private readonly CollectFlowDbContext _db;
-
-    public ScoringService(CollectFlowDbContext db)
+    private readonly IPlanLimitService _planLimitService;
+    private readonly TenantContext _tenantContext;
+    public ScoringService(CollectFlowDbContext db,
+    IPlanLimitService planLimitService,
+    TenantContext tenantContext)
     {
         _db = db;
+        _planLimitService = planLimitService;
+        _tenantContext = tenantContext;
     }
 
     public async Task<RunScoringResponse> RunAsync(CancellationToken cancellationToken = default)
     {
+        await _planLimitService.EnsureCanRunScoringAsync(cancellationToken);
+
+        var tenantId = _tenantContext.RequireTenantId();
+
+        _db.RevenueEvents.Add(new RevenueEvent
+        {
+            TenantId = tenantId,
+            EventType = "ScoringRun",
+            Metadata = "Manual scoring run"
+        });
+
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var invoices = await _db.Invoices

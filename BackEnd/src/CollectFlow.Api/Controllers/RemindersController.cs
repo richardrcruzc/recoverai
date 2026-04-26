@@ -1,4 +1,5 @@
-﻿using CollectFlow.Application.DTOs.Reminders;
+﻿using CollectFlow.Application.Common;
+using CollectFlow.Application.DTOs.Reminders;
 using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,24 @@ public class RemindersController : ControllerBase
         [FromBody] RunReminderRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _reminderService.RunAsync(request, cancellationToken);
-        return Ok(result);
+        try
+        {
+            var result = await _reminderService.RunAsync(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (PaywallException ex)
+        {
+            return StatusCode(StatusCodes.Status402PaymentRequired, new
+            {
+            message = ex.Message,
+                feature = ex.Feature,
+                upgradeRequired = true
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("logs")]

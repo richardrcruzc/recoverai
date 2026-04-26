@@ -1,4 +1,5 @@
 using CollectFlow.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollectFlow.Domain.Entities;
 
@@ -8,6 +9,7 @@ public class AdminUser : BaseEntity
     public Tenant Tenant { get; set; } = default!;
 
     public string FullName { get; set; } = string.Empty;
+    [EmailAddress]
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public AdminUserRole Role { get; set; } = AdminUserRole.Admin;

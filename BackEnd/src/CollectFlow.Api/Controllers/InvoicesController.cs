@@ -1,4 +1,5 @@
-﻿using CollectFlow.Application.DTOs.Invoices;
+﻿using CollectFlow.Application.Common;
+using CollectFlow.Application.DTOs.Invoices;
 using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,8 +28,24 @@ public class InvoicesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateInvoiceRequest request)
     {
-        var result = await _service.CreateAsync(request);
-        return Ok(result);
+        try
+        {
+            var result = await _service.CreateAsync(request);
+            return Ok(result);
+        }
+        catch (PaywallException ex)
+        {
+            return StatusCode(StatusCodes.Status402PaymentRequired, new
+            {
+                message = ex.Message,
+                feature = ex.Feature,
+                upgradeRequired = true
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPatch("{id}/status")]

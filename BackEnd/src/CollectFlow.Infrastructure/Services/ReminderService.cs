@@ -3,6 +3,7 @@ using CollectFlow.Application.Interfaces;
 using CollectFlow.Domain.Entities;
 using CollectFlow.Domain.Enums;
 using CollectFlow.Infrastructure.Persistence;
+using CollectFlow.Infrastructure.Tenancy;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectFlow.Infrastructure.Services;
@@ -11,19 +12,35 @@ public class ReminderService : IReminderService
 {
     private readonly CollectFlowDbContext _db;
     private readonly IEmailService _emailService;
-
+    private readonly IPlanLimitService _planLimitService;
+    private readonly TenantContext _tenantContext;
     public ReminderService(
         CollectFlowDbContext db,
-        IEmailService emailService)
+        IEmailService emailService,
+        IPlanLimitService planLimitService,
+    TenantContext tenantContext)
     {
         _db = db;
         _emailService = emailService;
+        _planLimitService = planLimitService;
+        _tenantContext = tenantContext;
     }
 
     public async Task<RunReminderResponse> RunAsync(
         RunReminderRequest request,
         CancellationToken cancellationToken = default)
     {
+        await _planLimitService.EnsureCanRunRemindersAsync(cancellationToken);
+
+        var tenantId = _tenantContext.RequireTenantId();
+
+        _db.RevenueEvents.Add(new RevenueEvent
+        {
+            TenantId = tenantId,
+            EventType = "ReminderRun",
+            Metadata = $"SendEmails={request.SendEmails}"
+        });
+
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var invoices = await _db.Invoices

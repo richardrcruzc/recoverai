@@ -12,11 +12,15 @@ public class InvoiceService : IInvoiceService
 {
     private readonly CollectFlowDbContext _db;
     private readonly TenantContext _tenantContext;
+    private readonly IPlanLimitService _planLimitService;
 
-    public InvoiceService(CollectFlowDbContext db, TenantContext tenantContext)
+    public InvoiceService(CollectFlowDbContext db, 
+        TenantContext tenantContext,
+        IPlanLimitService planLimitService)
     {
         _db = db;
-        _tenantContext = tenantContext; 
+        _tenantContext = tenantContext;
+        _planLimitService = planLimitService;
     }
 
     public async Task<IReadOnlyList<InvoiceResponse>> GetAllAsync(string? status = null)
@@ -51,8 +55,9 @@ public class InvoiceService : IInvoiceService
             .ToListAsync();
     }
 
-    public async Task<InvoiceResponse> CreateAsync(CreateInvoiceRequest request)
+    public async Task<InvoiceResponse> CreateAsync(CreateInvoiceRequest request, CancellationToken cancellationToken = default)
     {
+        await _planLimitService.EnsureCanCreateInvoiceAsync(cancellationToken);
         var tenantId = _tenantContext.RequireTenantId();
         var invoice = new Invoice
         {
@@ -73,7 +78,14 @@ public class InvoiceService : IInvoiceService
             TenantId = tenantId,
             EventType = "InvoiceCreated"
         });
-        await _db.SaveChangesAsync();
+
+        _db.RevenueEvents.Add(new RevenueEvent
+        {
+            TenantId = tenantId,
+            EventType = "InvoiceCreated",
+            Metadata = invoice.InvoiceNumber
+        });
+        await _db.SaveChangesAsync(cancellationToken);
 
         return new InvoiceResponse
         {
@@ -113,4 +125,5 @@ public class InvoiceService : IInvoiceService
             Status = invoice.Status
         };
     }
+     
 }

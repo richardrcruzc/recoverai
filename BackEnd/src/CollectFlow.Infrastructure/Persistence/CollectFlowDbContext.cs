@@ -12,7 +12,8 @@ public class CollectFlowDbContext : DbContext
          TenantContext tenantContext) : base(options)
     {
         _tenantContext = tenantContext;
-    }
+    } 
+    public DbSet<TenantSubscription> TenantSubscriptions => Set<TenantSubscription>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<RecoveryFee> RecoveryFees => Set<RecoveryFee>();
     public DbSet<RevenueEvent> RevenueEvents => Set<RevenueEvent>();
@@ -28,6 +29,35 @@ public class CollectFlowDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<RevenueEvent>(entity =>
+        {
+            entity.ToTable("RevenueEvents");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.EventType).HasMaxLength(100).IsRequired();
+            entity.Property(x => x.Metadata).HasMaxLength(4000);
+        });
+
+        modelBuilder.Entity<RevenueEvent>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
+        modelBuilder.Entity<TenantSubscription>(entity =>
+        {
+            entity.ToTable("TenantSubscriptions");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Plan).HasConversion<int>().IsRequired();
+            entity.Property(x => x.StripeCustomerId).HasMaxLength(200);
+            entity.Property(x => x.StripeSubscriptionId).HasMaxLength(200);
+
+            entity.HasIndex(x => x.TenantId).IsUnique();
+
+            entity.HasOne(x => x.Tenant)
+                .WithMany()
+                .HasForeignKey(x => x.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<TenantSubscription>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
         modelBuilder.Entity<RecoveryFee>(entity =>
         {
             entity.ToTable("RecoveryFees");

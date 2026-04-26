@@ -11,11 +11,16 @@ public class CustomerService : ICustomerService
 {
     private readonly CollectFlowDbContext _dbContext;
     private readonly TenantContext _tenantContext;
+    private readonly IPlanLimitService _planLimitService;
 
-    public CustomerService(CollectFlowDbContext dbContext, TenantContext tenantContext)
+
+    public CustomerService(CollectFlowDbContext dbContext, 
+        TenantContext tenantContext,
+        IPlanLimitService planLimitService  )
     {
         _dbContext = dbContext;
         _tenantContext = tenantContext;
+        _planLimitService = planLimitService;
     }
 
     public async Task<IReadOnlyList<CustomerResponse>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -49,6 +54,7 @@ public class CustomerService : ICustomerService
     public async Task<CustomerResponse> CreateAsync(CreateCustomerRequest request, CancellationToken cancellationToken = default)
     {
         var tenantId = _tenantContext.RequireTenantId();
+        await _planLimitService.EnsureCanCreateCustomerAsync(cancellationToken);
 
         var tenantExists = await _dbContext.Tenants.AnyAsync(x => x.Id == tenantId, cancellationToken);
         if (!tenantExists)

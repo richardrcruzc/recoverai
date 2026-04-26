@@ -35,8 +35,8 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IScoringService, ScoringService>();
         services.AddScoped<IBillingService, BillingService>();
-        
-         
+        services.AddScoped<IPlanLimitService, PlanLimitService>();
+
 
 
         return services;

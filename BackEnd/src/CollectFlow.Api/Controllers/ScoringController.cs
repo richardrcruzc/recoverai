@@ -1,4 +1,5 @@
-﻿using CollectFlow.Application.Interfaces;
+﻿using CollectFlow.Application.Common;
+using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +20,23 @@ public class ScoringController : ControllerBase
     [HttpPost("run")]
     public async Task<IActionResult> Run(CancellationToken cancellationToken)
     {
+        try { 
         var result = await _scoringService.RunAsync(cancellationToken);
         return Ok(result);
+    }
+        catch (PaywallException ex)
+        {
+            return StatusCode(StatusCodes.Status402PaymentRequired, new
+            {
+        message = ex.Message,
+                feature = ex.Feature,
+                upgradeRequired = true
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet]
