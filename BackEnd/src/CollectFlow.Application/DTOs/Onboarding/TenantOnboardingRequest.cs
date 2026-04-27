@@ -30,7 +30,13 @@ public class TenantOnboardingRequest
 
     [MaxLength(100)]
     public string MonthlyInvoiceVolume { get; set; } = string.Empty;
+
+    [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the Terms.")]
     public bool AcceptTerms { get; set; }
+
+    [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the Privacy Policy.")]
     public bool AcceptPrivacy { get; set; }
+
+    [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept communication authorization.")]
     public bool AcceptCommunicationAuthorization { get; set; }
 }
