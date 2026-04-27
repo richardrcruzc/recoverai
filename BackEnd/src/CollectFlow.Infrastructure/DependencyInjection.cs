@@ -38,6 +38,10 @@ public static class DependencyInjection
         services.AddScoped<IPlanLimitService, PlanLimitService>();
         services.AddScoped<IEmailAutomationService, EmailAutomationService>();
         services.AddScoped<ICollectionsEngineService, CollectionsEngineService>();
+        services.AddScoped<ISendGridOutboundService, SendGridOutboundService>();
+        services.AddScoped<IOutboundEmailService, OutboundEmailService>();
+        services.AddScoped<IOutboundQueryService, OutboundQueryService>();
+        services.AddScoped<ITenantJobRunner, TenantJobRunner>();
 
 
         return services;

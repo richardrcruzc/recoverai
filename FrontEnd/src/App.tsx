@@ -18,6 +18,7 @@ import Onboarding from './pages/Onboarding';
 import Billing from './pages/Billing';
 import EmailAutomation from './pages/EmailAutomation';
 import Collections from './pages/Collections';
+import Outbound from './pages/Outbound';
 
 export default function App() {
   return (
@@ -28,6 +29,14 @@ export default function App() {
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
 
+<Route
+  path="/outbound"
+  element={
+    <ProtectedRoute>
+      <Outbound />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/collections"
   element={

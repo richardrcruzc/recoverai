@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.7" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectFlow.Application\CollectFlow.Application.csproj" />

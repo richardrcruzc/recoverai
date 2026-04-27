@@ -116,15 +116,9 @@ app.UseAuthorization();
 app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
 
-RecurringJob.AddOrUpdate<IReminderService>(
+RecurringJob.AddOrUpdate<ITenantJobRunner>(
     "daily-overdue-invoice-reminders",
-    service => service.RunAsync(
-        new RunReminderRequest
-        {
-            MinimumDaysOverdue = 1,
-            SendEmails = true
-        },
-        CancellationToken.None),
+    runner => runner.RunReminderJobsForAllTenantsAsync(CancellationToken.None),
     "0 8 * * *");
 
 RecurringJob.AddOrUpdate<IEmailAutomationService>(

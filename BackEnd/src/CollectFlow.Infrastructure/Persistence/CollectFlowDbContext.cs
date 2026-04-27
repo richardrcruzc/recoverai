@@ -13,6 +13,10 @@ public class CollectFlowDbContext : DbContext
     {
         _tenantContext = tenantContext;
     }
+    public DbSet<OutboundContact> OutboundContacts => Set<OutboundContact>();
+    public DbSet<OutboundCampaign> OutboundCampaigns => Set<OutboundCampaign>();
+    public DbSet<OutboundEmailSend> OutboundEmailSends => Set<OutboundEmailSend>();
+    public DbSet<OutboundEmailEvent> OutboundEmailEvents => Set<OutboundEmailEvent>();
     public DbSet<CollectionAction> CollectionActions => Set<CollectionAction>();
     public DbSet<CollectionActionLog> CollectionActionLogs => Set<CollectionActionLog>();
     public DbSet<CollectionCallTask> CollectionCallTasks => Set<CollectionCallTask>();

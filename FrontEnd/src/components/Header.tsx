@@ -20,7 +20,8 @@ const appLinks = [
   { to: '/scoring', label: 'Scoring' },
   { to: '/billing', label: 'Billing' } ,
    { to: '/email-automation', label: 'Email Automation' }  ,
-    { to: '/collections', label: 'Collections' }
+    { to: '/collections', label: 'Collections' },
+    { to: '/outbound', label: 'Outbound' }
 ];
 
 function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {
