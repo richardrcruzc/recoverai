@@ -13,6 +13,7 @@ public class CollectFlowDbContext : DbContext
     {
         _tenantContext = tenantContext;
     }
+    public DbSet<ConsentRecord> ConsentRecords => Set<ConsentRecord>();
     public DbSet<LeadSourceJob> LeadSourceJobs => Set<LeadSourceJob>();
     public DbSet<OutboundContact> OutboundContacts => Set<OutboundContact>();
     public DbSet<OutboundCampaign> OutboundCampaigns => Set<OutboundCampaign>();
@@ -38,6 +39,29 @@ public class CollectFlowDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<ConsentRecord>(entity =>
+        {
+            entity.ToTable("ConsentRecords");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.ConsentType).HasMaxLength(100).IsRequired();
+            entity.Property(x => x.Version).HasMaxLength(50).IsRequired();
+            entity.Property(x => x.IpAddress).HasMaxLength(100);
+            entity.Property(x => x.UserAgent).HasMaxLength(500);
+
+            entity.HasOne(x => x.Tenant)
+                .WithMany()
+                .HasForeignKey(x => x.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.AdminUser)
+                .WithMany()
+                .HasForeignKey(x => x.AdminUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<ConsentRecord>().HasQueryFilter(x =>
+            !_tenantContext.HasTenant || x.TenantId == _tenantContext.TenantId);
         modelBuilder.Entity<LeadSourceJob>(entity =>
         {
             entity.ToTable("LeadSourceJobs");

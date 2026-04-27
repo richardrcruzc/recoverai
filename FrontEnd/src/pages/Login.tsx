@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { login } from '../lib/auth';
+import Footer from '../components/Footer';
 
 type LocationState = {
   from?: string;
@@ -99,6 +100,9 @@ export default function Login() {
           </div>
         </section>
       </main>
+       <div className="min-h-screen bg-slate-50 text-slate-900">  
+            <Footer />
+          </div>
     </div>
   );
 }

@@ -30,4 +30,7 @@ public class TenantOnboardingRequest
 
     [MaxLength(100)]
     public string MonthlyInvoiceVolume { get; set; } = string.Empty;
+    public bool AcceptTerms { get; set; }
+    public bool AcceptPrivacy { get; set; }
+    public bool AcceptCommunicationAuthorization { get; set; }
 }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { demoInvoices, demoMetrics, demoReminders } from '../lib/demoData';
+import Footer from '../components/Footer';
 
 function money(value: number) {
   return new Intl.NumberFormat(undefined, {
@@ -122,6 +123,9 @@ export default function Demo() {
           </Link>
         </div>
       </main>
+       <div className="min-h-screen bg-slate-50 text-slate-900">  
+            <Footer />
+          </div>
     </div>
   );
 }

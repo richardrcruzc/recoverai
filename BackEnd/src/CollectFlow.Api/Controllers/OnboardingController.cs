@@ -31,9 +31,17 @@ public class OnboardingController : ControllerBase
         [FromBody] TenantOnboardingRequest request,
         CancellationToken cancellationToken)
     {
+        if (!request.AcceptTerms || !request.AcceptPrivacy || !request.AcceptCommunicationAuthorization)
+        {
+            return BadRequest(new
+            {
+                message = "You must accept the Terms, Privacy Policy, and Communication Authorization to continue."
+            });
+        }
+
         var slug = request.TenantSlug.Trim().ToLowerInvariant();
         var email = request.AdminEmail.Trim().ToLowerInvariant();
-
+        
         var tenantExists = await _db.Tenants.AnyAsync(x => x.Slug == slug, cancellationToken);
         if (tenantExists)
             return BadRequest(new { message = "Workspace slug is already taken." });
@@ -42,6 +50,7 @@ public class OnboardingController : ControllerBase
         if (adminExists)
             return BadRequest(new { message = "Admin email already exists." });
 
+       
         var tenant = new Tenant
         {
             Id = Guid.NewGuid(),
@@ -63,6 +72,42 @@ public class OnboardingController : ControllerBase
 
         _db.Tenants.Add(tenant);
         _db.AdminUsers.Add(admin);
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        var userAgent = Request.Headers.UserAgent.ToString();
+
+        _db.ConsentRecords.AddRange(
+            new ConsentRecord
+            {
+                TenantId = tenant.Id,
+                AdminUser = admin,
+                ConsentType = "TermsOfService",
+                Version = "1.0",
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                ConsentedAtUtc = DateTime.UtcNow
+            },
+            new ConsentRecord
+            {
+                TenantId = tenant.Id,
+                AdminUser = admin,
+                ConsentType = "PrivacyPolicy",
+                Version = "1.0",
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                ConsentedAtUtc = DateTime.UtcNow
+            },
+            new ConsentRecord
+            {
+                TenantId = tenant.Id,
+                AdminUser = admin,
+                ConsentType = "CommunicationAuthorization",
+                Version = "1.0",
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                ConsentedAtUtc = DateTime.UtcNow
+            }
+        );
 
         await _db.SaveChangesAsync(cancellationToken);
 

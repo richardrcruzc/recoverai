@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import PlanUsageCard from '../components/PlanUsageCard';
 
 export default function Dashboard() {
   const adminModules = [
@@ -19,7 +20,9 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
-
+<div className="mt-8">
+  <PlanUsageCard />
+</div>
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <p className="text-sm font-medium uppercase tracking-wide text-slate-500">RecoverAI Dashboard</p>
         <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">SaaS control center</h1>

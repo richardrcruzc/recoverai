@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { createTenantOnboarding } from '../lib/onboardingApi';
 import type { TenantOnboardingRequest } from '../types/onboarding';
+import Footer from '../components/Footer';
 
 const initialForm: TenantOnboardingRequest = {
   companyName: '',
@@ -179,6 +180,9 @@ export default function Onboarding() {
           </div>
         </form>
       </main>
+       <div className="min-h-screen bg-slate-50 text-slate-900">  
+            <Footer />
+          </div>
     </div>
   );
 }
@@ -197,6 +201,7 @@ function Field({
   type?: string;
 }) {
   return (
+    
     <label className="block">
       <span className="mb-2 block text-sm font-medium text-slate-700">{label}</span>
       <input
@@ -207,5 +212,6 @@ function Field({
         className="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-slate-900"
       />
     </label>
+
   );
 }

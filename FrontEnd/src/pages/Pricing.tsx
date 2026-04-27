@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 export default function Pricing() {
   return (
@@ -56,6 +57,9 @@ export default function Pricing() {
 
         </div>
       </main>
+       <div className="min-h-screen bg-slate-50 text-slate-900">  
+            <Footer />
+          </div>
     </div>
   );
 }
