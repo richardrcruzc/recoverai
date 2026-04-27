@@ -22,7 +22,8 @@ const appLinks = [
    { to: '/email-automation', label: 'Email Automation' }  ,
     { to: '/collections', label: 'Collections' },
     { to: '/outbound', label: 'Outbound' },
-    { to: '/lead-research', label: 'Lead Research' }
+    { to: '/lead-research', label: 'Lead Research' },
+    { to: '/imports/invoices', label: 'Import Invoices' }
 ];
 
 function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {

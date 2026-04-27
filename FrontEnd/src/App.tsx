@@ -20,6 +20,8 @@ import EmailAutomation from './pages/EmailAutomation';
 import Collections from './pages/Collections';
 import Outbound from './pages/Outbound';
 import LeadResearch from './pages/LeadResearch';
+import ImportInvoices from './pages/ImportInvoices';
+
 
 export default function App() {
   return (
@@ -30,6 +32,14 @@ export default function App() {
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
 
+<Route
+  path="/imports/invoices"
+  element={
+    <ProtectedRoute>
+      <ImportInvoices />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/lead-research"
   element={
