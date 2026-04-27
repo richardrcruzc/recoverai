@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CollectFlow.Api.DTOs.Auth;
+namespace CollectFlow.Application.DTOs.Auth;
 
 public class LoginResponse
 {

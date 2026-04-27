@@ -1,4 +1,4 @@
-using CollectFlow.Api.DTOs.Auth;
+using CollectFlow.Application.DTOs.Auth;
 using CollectFlow.Api.Services;
 using CollectFlow.Application.Interfaces;
 using CollectFlow.Infrastructure.Services;

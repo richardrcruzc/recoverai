@@ -50,6 +50,8 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.UserAgent.ParseAdd(
                 "RecoverAI-LeadResearchBot/1.0 (+https://recoverai.net)");
         });
+        services.AddScoped<IInvoiceImportService, InvoiceImportService>();
+
 
 
         return services;
