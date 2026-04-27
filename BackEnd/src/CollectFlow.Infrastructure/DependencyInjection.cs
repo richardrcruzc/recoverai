@@ -42,6 +42,14 @@ public static class DependencyInjection
         services.AddScoped<IOutboundEmailService, OutboundEmailService>();
         services.AddScoped<IOutboundQueryService, OutboundQueryService>();
         services.AddScoped<ITenantJobRunner, TenantJobRunner>();
+        services.AddScoped<ILeadScrapingService, LeadScrapingService>();
+
+        services.AddHttpClient("LeadScraper", client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(15);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "RecoverAI-LeadResearchBot/1.0 (+https://recoverai.net)");
+        });
 
 
         return services;

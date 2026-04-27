@@ -13,6 +13,7 @@ public class CollectFlowDbContext : DbContext
     {
         _tenantContext = tenantContext;
     }
+    public DbSet<LeadSourceJob> LeadSourceJobs => Set<LeadSourceJob>();
     public DbSet<OutboundContact> OutboundContacts => Set<OutboundContact>();
     public DbSet<OutboundCampaign> OutboundCampaigns => Set<OutboundCampaign>();
     public DbSet<OutboundEmailSend> OutboundEmailSends => Set<OutboundEmailSend>();
@@ -36,6 +37,20 @@ public class CollectFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<LeadSourceJob>(entity =>
+        {
+            entity.ToTable("LeadSourceJobs");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.SourceName).HasMaxLength(100).IsRequired();
+            entity.Property(x => x.SourceUrl).HasMaxLength(1000);
+            entity.Property(x => x.SearchQuery).HasMaxLength(300);
+            entity.Property(x => x.Location).HasMaxLength(150);
+            entity.Property(x => x.Status).HasMaxLength(50);
+            entity.Property(x => x.ErrorMessage).HasMaxLength(2000);
+        });
+
         modelBuilder.Entity<CollectionAction>(entity =>
         {
             entity.ToTable("CollectionActions");
