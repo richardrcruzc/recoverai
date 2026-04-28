@@ -1,0 +1,24 @@
+<svg width="260" height="64" viewBox="0 0 260 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">CollectFlowAI</title>
+  <desc id="desc">CollectFlowAI logo with tagline Automate. Recover. Grow.</desc>
+  <defs>
+    <linearGradient id="flowGradient" x1="8" y1="8" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="8" width="48" height="48" rx="16" fill="#0F172A"/>
+
+  <path d="M15 31C15 21.6 22.6 14 32 14H37" stroke="url(#flowGradient)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M36 12L44 20L36 28" stroke="url(#flowGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="17" y="38" width="5" height="8" rx="1.5" fill="#FFFFFF"/>
+  <rect x="26" y="33" width="5" height="13" rx="1.5" fill="#FFFFFF"/>
+  <rect x="35" y="27" width="5" height="19" rx="1.5" fill="#FFFFFF"/>
+
+  <text x="64" y="31" font-family="Inter, Arial, system-ui, sans-serif" font-size="21" font-weight="750" letter-spacing="-0.7" fill="#0F172A">CollectFlow</text>
+  <text x="181" y="31" font-family="Inter, Arial, system-ui, sans-serif" font-size="21" font-weight="850" letter-spacing="-0.7" fill="#2563EB">AI</text>
+
+  <text x="66" y="48" font-family="Inter, Arial, system-ui, sans-serif" font-size="8.5" font-weight="700" letter-spacing="2.8" fill="#64748B">AUTOMATE. RECOVER. GROW.</text>
+</svg>

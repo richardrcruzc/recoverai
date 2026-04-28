@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logo from '../assets/recoverai-logo.svg';
+import logo from '../assets/CollectFlowAI-logo.png';
 import { getToken, logout } from '../lib/auth';
 
 const publicLinks = [
@@ -68,11 +68,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setOpen(false)}>
-          <img src={logo} alt="RecoverAI" className="h-10 w-auto shrink-0 sm:h-11" />
-          <div className="hidden min-w-0 lg:block">
-            <div className="truncate text-sm font-semibold text-slate-900">RecoverAI</div>
-            <div className="truncate text-xs text-slate-500">AI collections for service businesses</div>
-          </div>
+     <img
+  src={logo}
+  alt="CollectFlowAI - Automate. Recover. Grow."
+  className="h-10 w-auto object-contain sm:h-12 md:h-14"
+/>    
         </Link>
 
         <nav className="hidden flex-1 items-center justify-center gap-1 xl:flex">
