@@ -13,7 +13,7 @@ export default function Login() {
   const location = useLocation();
   const state = location.state as LocationState | null;
 
-  const [email, setEmail] = useState('admin@recoverai.net');
+  const [email, setEmail] = useState('admin@collectflowai.com');
   const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

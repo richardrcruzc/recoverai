@@ -19,7 +19,7 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-              RecoverAI helps service businesses prioritize overdue invoices, automate professional follow-ups, track payments, and recover cash without awkward client chasing.
+              CollectFlowAI helps service businesses prioritize overdue invoices, automate professional follow-ups, track payments, and recover cash without awkward client chasing.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -88,7 +88,7 @@ export default function Landing() {
             Get your free invoice recovery audit
           </h2>
           <p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-600">
-            Enter your business details, add a few overdue invoices, and RecoverAI will show which accounts to prioritize first.
+            Enter your business details, add a few overdue invoices, and CollectFlowAI will show which accounts to prioritize first.
           </p>
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -126,7 +126,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                RecoverAI turns collections into a repeatable workflow.
+                CollectFlowAI turns collections into a repeatable workflow.
               </h2>
               <p className="mt-4 leading-7 text-slate-300">
                 Add invoices, get an AI-powered priority queue, send structured reminders, and track recovered payments from one dashboard.
@@ -154,7 +154,7 @@ export default function Landing() {
 
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-4">
             <Step number="1" title="Add invoices" text="Enter overdue invoices or import them later." />
-            <Step number="2" title="Run scoring" text="RecoverAI ranks accounts by urgency and balance." />
+            <Step number="2" title="Run scoring" text="CollectFlowAI ranks accounts by urgency and balance." />
             <Step number="3" title="Send reminders" text="Use structured follow-ups to reduce manual chasing." />
             <Step number="4" title="Track payments" text="Record recovered cash and see performance." />
           </div>
@@ -162,7 +162,7 @@ export default function Landing() {
 
         <section className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-2xl font-semibold">Before RecoverAI</h2>
+            <h2 className="text-2xl font-semibold">Before CollectFlowAI </h2>
             <ul className="mt-5 space-y-3 text-slate-600">
               <li>• Invoices followed up manually</li>
               <li>• No clear priority queue</li>
@@ -172,7 +172,7 @@ export default function Landing() {
           </div>
 
           <div className="rounded-[2rem] border-2 border-slate-900 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-2xl font-semibold">After RecoverAI</h2>
+            <h2 className="text-2xl font-semibold">After CollectFlowAI </h2>
             <ul className="mt-5 space-y-3 text-slate-600">
               <li>• AI ranks overdue invoices</li>
               <li>• Follow-ups become consistent</li>
@@ -203,7 +203,7 @@ export default function Landing() {
             </div>
 
             <div className="mt-6 rounded-2xl bg-slate-100 p-5 text-center text-sm font-medium text-slate-700">
-              RecoverAI makes money only when recovery happens.
+              CollectFlowAI makes money only when recovery happens.
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">

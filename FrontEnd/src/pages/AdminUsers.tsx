@@ -131,7 +131,7 @@ export default function AdminUsers() {
           <p className="text-sm font-medium uppercase tracking-wide text-slate-500">Administration</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">Admin User</h1>
           <p className="mt-3 max-w-2xl text-slate-600">
-            Manage internal users who can access the RecoverAI admin dashboard, lead pipeline, and future customer and invoice modules.
+            Manage internal users who can access the CollectFlowAI admin dashboard, lead pipeline, and future customer and invoice modules.
           </p>
         </div>
 
@@ -174,7 +174,7 @@ export default function AdminUsers() {
                   value={form.email}
                   onChange={(e) => updateForm('email', e.target.value)}
                   className="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-slate-900"
-                  placeholder="jane@recoverai.net"
+                  placeholder="jane@collectflowai.COM"
                 />
               </label>
 

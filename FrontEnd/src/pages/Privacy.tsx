@@ -41,7 +41,7 @@ export default function Privacy() {
           </Section>
 
           <Section title="8. Contact">
-            For privacy questions, contact privacy@recoverai.net.
+            For privacy questions, contact privacy@collectflowai.com.
           </Section>
         </div>
       </main>

@@ -24,7 +24,7 @@ export default function Dashboard() {
   <PlanUsageCard />
 </div>
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
-        <p className="text-sm font-medium uppercase tracking-wide text-slate-500">RecoverAI Dashboard</p>
+        <p className="text-sm font-medium uppercase tracking-wide text-slate-500">CollectFlowAI Dashboard</p>
         <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">SaaS control center</h1>
 
         <section className="mt-8">

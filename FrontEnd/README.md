@@ -1,4 +1,4 @@
-# RecoverAI Frontend Leads Admin
+# CollectFlowAIFrontend Leads Admin
 
 Pages:
 - `/`
@@ -41,7 +41,7 @@ These routes require login:
 Demo login:
 
 ```text
-admin@recoverai.net
+admin@collectflowai .net
 admin123
 ```
 

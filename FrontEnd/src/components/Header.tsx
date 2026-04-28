@@ -23,7 +23,8 @@ const appLinks = [
     { to: '/collections', label: 'Collections' },
     { to: '/outbound', label: 'Outbound' },
     { to: '/lead-research', label: 'Lead Research' },
-    { to: '/imports/invoices', label: 'Import Invoices' }
+    { to: '/imports/invoices', label: 'Import Invoices' },
+    { to: '/leads/import', label: 'Import Leads' }
 ];
 
 function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {

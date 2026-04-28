@@ -24,8 +24,8 @@ async function request<T>(path: string, options?: RequestInit & { authenticated?
   });
 
   if (response.status === 401) {
-    localStorage.removeItem('recoverai_access_token');
-    localStorage.removeItem('recoverai_user');
+    localStorage.removeItem('collectflowai_access_token');
+    localStorage.removeItem('collectflowai_user');
     window.location.href = '/login';
     throw new Error('Session expired. Please log in again.');
   }

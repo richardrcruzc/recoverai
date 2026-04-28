@@ -28,10 +28,10 @@ function saveLocalLead(values: LeadFormValues): void {
     ...values,
     id: crypto.randomUUID(),
     createdAtUtc: new Date().toISOString(),
-    source: 'recoverai-react-vite'
+    source: 'collectflowai-react-vite'
   };
 
-  const existing = localStorage.getItem('recoverai-leads');
+  const existing = localStorage.getItem('collectflowai_leads');
   const leads = existing ? JSON.parse(existing) : [];
-  localStorage.setItem('recoverai-leads', JSON.stringify([record, ...leads]));
+  localStorage.setItem('collectflowai_leads', JSON.stringify([record, ...leads]));
 }

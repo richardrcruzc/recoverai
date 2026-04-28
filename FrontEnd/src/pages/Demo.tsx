@@ -29,10 +29,10 @@ export default function Demo() {
               Public Demo
             </p>
             <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
-              RecoverAI Demo Dashboard
+              CollectFlowAI Demo Dashboard
             </h1>
             <p className="mt-3 max-w-2xl text-slate-600">
-              Explore how RecoverAI prioritizes overdue invoices, automates reminders, and tracks collections without logging in.
+              Explore how CollectFlowAI prioritizes overdue invoices, automates reminders, and tracks collections without logging in.
             </p>
           </div>
 

@@ -34,7 +34,7 @@ export default function Billing() {
         </h1>
 
         <p className="mt-3 max-w-2xl text-slate-600">
-          RecoverAI tracks recovered payments and calculates the platform fee only on successful recoveries.
+          CollectFlowAI tracks recovered payments and calculates the platform fee only on successful recoveries.
         </p>
 
         {error ? (
@@ -58,7 +58,7 @@ export default function Billing() {
               <h2 className="text-xl font-semibold">Pricing Statement</h2>
 
               <p className="mt-3 leading-7 text-slate-600">
-                RecoverAI uses performance-based pricing. Your business pays no upfront software fee.
+                CollectFlowAI uses performance-based pricing. Your business pays no upfront software fee.
                 A small recovery fee is calculated only when payments are successfully recovered and recorded.
               </p>
 

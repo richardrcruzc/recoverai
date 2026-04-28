@@ -13,11 +13,11 @@ export default function AcceptableUse() {
 
         <div className="mt-8 space-y-6 rounded-3xl bg-white p-6 leading-7 shadow-sm">
           <Section title="Permitted Use">
-            RecoverAI may be used for lawful accounts receivable automation, invoice follow-up, payment tracking, business communications, and recovery workflow management.
+            CollectFlowAI may be used for lawful accounts receivable automation, invoice follow-up, payment tracking, business communications, and recovery workflow management.
           </Section>
 
           <Section title="Prohibited Conduct">
-            You may not use RecoverAI to harass, threaten, mislead, impersonate, shame, intimidate, or unlawfully pressure recipients.
+            You may not use CollectFlowAI to harass, threaten, mislead, impersonate, shame, intimidate, or unlawfully pressure recipients.
           </Section>
 
           <Section title="Communication Rules">
@@ -29,11 +29,11 @@ export default function AcceptableUse() {
           </Section>
 
           <Section title="Consumer Debt">
-            RecoverAI is intended as business accounts receivable automation. If you use it for consumer debt, you are responsible for complying with applicable debt collection laws.
+            CollectFlowAI is intended as business accounts receivable automation. If you use it for consumer debt, you are responsible for complying with applicable debt collection laws.
           </Section>
 
           <Section title="Enforcement">
-            RecoverAI may suspend or terminate accounts that violate this policy.
+            CollectFlowAI may suspend or terminate accounts that violate this policy.
           </Section>
         </div>
       </main>

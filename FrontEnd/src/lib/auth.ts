@@ -1,5 +1,5 @@
-const TOKEN_KEY = 'recoverai_access_token';
-const USER_KEY = 'recoverai_user';
+const TOKEN_KEY = 'collectflowai_access_token';
+const USER_KEY = 'collectflowai_user';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
 

@@ -131,7 +131,7 @@ export default function Onboarding() {
             Tenant Onboarding
           </p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
-            Create your RecoverAI workspace
+            Create your CollectFlowAI workspace
           </h1>
           <p className="mt-3 max-w-2xl text-slate-600">
             Set up your business workspace and first admin user.
@@ -230,7 +230,7 @@ export default function Onboarding() {
     label={
       <>
         I confirm that I am authorized to contact customers regarding invoices
-        and consent to RecoverAI sending communications on behalf of my business.
+        and consent to CollectFlowAI sending communications on behalf of my business.
       </>
     }
   />

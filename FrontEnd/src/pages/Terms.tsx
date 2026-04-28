@@ -13,7 +13,7 @@ export default function Terms() {
 
         <div className="mt-8 space-y-6 rounded-3xl bg-white p-6 leading-7 shadow-sm">
           <Section title="1. Overview">
-            RecoverAI provides software that helps businesses manage outstanding invoices through automated workflows, communications, analytics, and recovery tracking.
+            CollectFlowAIprovides software that helps businesses manage outstanding invoices through automated workflows, communications, analytics, and recovery tracking.
           </Section>
 
           <Section title="2. Eligibility">
@@ -21,7 +21,7 @@ export default function Terms() {
           </Section>
 
           <Section title="3. Service Scope">
-            RecoverAI is a technology platform. RecoverAI does not act as a debt collector, law firm, financial institution, or legal representative.
+            CollectFlowAIis a technology platform. CollectFlowAIdoes not act as a debt collector, law firm, financial institution, or legal representative.
           </Section>
 
           <Section title="4. User Responsibilities">
@@ -29,23 +29,23 @@ export default function Terms() {
           </Section>
 
           <Section title="5. Prohibited Use">
-            You may not use RecoverAI to harass, threaten, mislead, impersonate another entity, upload fraudulent data, or violate applicable laws.
+            You may not use CollectFlowAIto harass, threaten, mislead, impersonate another entity, upload fraudulent data, or violate applicable laws.
           </Section>
 
           <Section title="6. Fees">
-            RecoverAI may charge subscription fees or performance-based recovery fees. Fees are disclosed before use.
+            CollectFlowAImay charge subscription fees or performance-based recovery fees. Fees are disclosed before use.
           </Section>
 
           <Section title="7. Data Ownership">
-            You retain ownership of your business data. RecoverAI processes data to provide and improve the service.
+            You retain ownership of your business data. CollectFlowAIprocesses data to provide and improve the service.
           </Section>
 
           <Section title="8. Limitation of Liability">
-            RecoverAI is not responsible for collection outcomes, customer disputes, lost revenue, or legal claims arising from your use of the platform.
+            CollectFlowAIis not responsible for collection outcomes, customer disputes, lost revenue, or legal claims arising from your use of the platform.
           </Section>
 
           <Section title="9. Termination">
-            RecoverAI may suspend or terminate accounts that violate these terms.
+            CollectFlowAImay suspend or terminate accounts that violate these terms.
           </Section>
 
           <Section title="10. Governing Law">

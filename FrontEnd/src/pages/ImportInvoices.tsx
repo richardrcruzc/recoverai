@@ -40,7 +40,7 @@ export default function ImportInvoices() {
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'recoverai-invoice-import-template.csv';
+    link.download = 'collectflowai-invoice-import-template.csv';
     link.click();
 
     URL.revokeObjectURL(url);
