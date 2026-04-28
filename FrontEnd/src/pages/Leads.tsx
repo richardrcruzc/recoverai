@@ -28,7 +28,14 @@ export default function Leads() {
       <Header />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div><p className="text-sm font-medium uppercase tracking-wide text-slate-500">Leads Admin</p><h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">Demo request pipeline</h1></div>
+          <div><p className="text-sm font-medium uppercase tracking-wide text-slate-500">Leads Admin</p>
+          <Link
+  to="/leads/import"
+  className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white"
+>
+  Import Leads
+</Link>
+<h1 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">Demo request pipeline</h1></div>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-sm">
             {['All', 'New', 'Contacted', 'Qualified', 'DemoScheduled', 'ProposalSent', 'Won', 'Lost'].map((status) => <option key={status}>{status}</option>)}
           </select>

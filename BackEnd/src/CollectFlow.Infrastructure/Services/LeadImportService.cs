@@ -1,6 +1,7 @@
 ﻿using CollectFlow.Application.DTOs.Leads;
 using CollectFlow.Application.Interfaces;
 using CollectFlow.Domain.Entities;
+using CollectFlow.Domain.Enums;
 using CollectFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -85,7 +86,7 @@ public class LeadImportService : ILeadImportService
                     Phone = phone.Trim(),
                     Message =
                         $"Imported lead. Title: {title}. Source: {(string.IsNullOrWhiteSpace(source) ? "CSV Import" : source)}",
-                    Status = "New"
+                    Status = LeadStatus.New
                 };
 
                 _db.Leads.Add(lead);

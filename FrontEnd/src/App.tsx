@@ -24,6 +24,7 @@ import ImportInvoices from './pages/ImportInvoices';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import AcceptableUse from './pages/AcceptableUse';
+import LeadImport from './pages/LeadImport';
 
 export default function App() {
   return (
@@ -37,6 +38,14 @@ export default function App() {
 <Route path="/privacy" element={<Privacy />} />
 <Route path="/acceptable-use" element={<AcceptableUse />} />
 
+<Route
+  path="/leads/import"
+  element={
+    <ProtectedRoute>
+      <LeadImport />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/imports/invoices"
   element={

@@ -23,4 +23,5 @@ public class Lead : BaseEntity
     public int Score { get; set; } = 0;
 
     public DateTime? LastContactedAtUtc { get; set; }
+    public string Message { get; set; } = "New";
 }
