@@ -51,6 +51,7 @@ public static class DependencyInjection
                 "RecoverAI-LeadResearchBot/1.0 (+https://recoverai.net)");
         });
         services.AddScoped<IInvoiceImportService, InvoiceImportService>();
+        services.AddScoped<ILeadImportService, LeadImportService>();
 
 
 
