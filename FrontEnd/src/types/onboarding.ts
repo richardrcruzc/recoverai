@@ -6,6 +6,10 @@ export type TenantOnboardingRequest = {
   password: string;
   industry: string;
   monthlyInvoiceVolume: string;
+
+   acceptTerms: boolean;
+  acceptPrivacy: boolean;
+  acceptCommunicationAuthorization: boolean;
 };
 
 export type TenantOnboardingResponse = {

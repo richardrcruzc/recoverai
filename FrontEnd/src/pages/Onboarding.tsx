@@ -5,6 +5,28 @@ import { createTenantOnboarding } from '../lib/onboardingApi';
 import type { TenantOnboardingRequest } from '../types/onboarding';
 import Footer from '../components/Footer';
 
+function Checkbox({
+  checked,
+  onChange,
+  label
+}: {
+  checked: boolean;
+  onChange: (value: boolean) => void;
+  label: React.ReactNode;
+}) {
+  return (
+    <label className="flex items-start gap-3 text-sm leading-6 text-slate-700">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-1 h-4 w-4 rounded border-slate-300"
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
 const initialForm: TenantOnboardingRequest = {
   companyName: '',
   tenantSlug: '',
@@ -12,7 +34,10 @@ const initialForm: TenantOnboardingRequest = {
   adminEmail: '',
   password: '',
   industry: 'Service Business',
-  monthlyInvoiceVolume: ''
+  monthlyInvoiceVolume: '',
+  acceptTerms: false,
+  acceptPrivacy: false,
+  acceptCommunicationAuthorization: false
 };
 
 function slugify(value: string) {
@@ -76,6 +101,12 @@ export default function Onboarding() {
     }
 
     try {
+
+        if (!form.acceptTerms || !form.acceptPrivacy || !form.acceptCommunicationAuthorization) {
+      setError('You must accept the Terms, Privacy Policy, and Communication Authorization.');
+      setSaving(false);
+      return;
+    }      
       await createTenantOnboarding(form);
       navigate('/login', {
         replace: true,
@@ -164,7 +195,46 @@ export default function Onboarding() {
           {error ? (
             <p className="mt-6 rounded-2xl bg-rose-50 p-4 text-sm text-rose-700">{error}</p>
           ) : null}
+<div className="mt-8 space-y-4 rounded-3xl border border-slate-200 bg-slate-50 p-5">
+  <Checkbox
+    checked={form.acceptTerms}
+    onChange={(value) => updateForm('acceptTerms', value)}
+    label={
+      <>
+        I agree to the{' '}
+        <Link to="/terms" className="font-medium underline">
+          Terms of Service
+        </Link>
+        .
+      </>
+    }
+  />
 
+  <Checkbox
+    checked={form.acceptPrivacy}
+    onChange={(value) => updateForm('acceptPrivacy', value)}
+    label={
+      <>
+        I agree to the{' '}
+        <Link to="/privacy" className="font-medium underline">
+          Privacy Policy
+        </Link>
+        .
+      </>
+    }
+  />
+
+  <Checkbox
+    checked={form.acceptCommunicationAuthorization}
+    onChange={(value) => updateForm('acceptCommunicationAuthorization', value)}
+    label={
+      <>
+        I confirm that I am authorized to contact customers regarding invoices
+        and consent to RecoverAI sending communications on behalf of my business.
+      </>
+    }
+  />
+</div>
           <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <Link to="/demo" className="text-sm font-medium text-slate-600 hover:text-slate-900">
               Back to demo
