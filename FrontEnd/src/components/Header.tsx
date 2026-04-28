@@ -62,7 +62,7 @@ export default function Header() {
     navigate('/login');
   };
 
-  const links = isLoggedIn ? [...publicLinks, ...appLinks] : publicLinks;
+  const links = isLoggedIn ? [...appLinks] : publicLinks;
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -99,12 +99,7 @@ export default function Header() {
             </Link>
           )}
 
-          <Link
-            to={isLoggedIn ? '/dashboard' : '/onboarding'}
-            className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
-          >
-            {isLoggedIn ? 'Open App' : 'Start Setup'}
-          </Link>
+          
         </div>
 
         <button

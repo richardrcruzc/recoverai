@@ -72,7 +72,10 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 "http://localhost:5173",
                 "http://localhost:3000",
-                "https://your-frontend-domain.com");
+                "http://collectflowai.com",
+                "http://www.collectflowai.com",
+                "https://collectflowai.com",
+                "https://www.collectflowai.com");
     });
 });
 
