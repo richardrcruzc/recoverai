@@ -1,4 +1,4 @@
-import type { LeadFormErrors, LeadFormValues } from '@/lib/types';
+import type { LeadFormErrors, LeadFormValues } from './types';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

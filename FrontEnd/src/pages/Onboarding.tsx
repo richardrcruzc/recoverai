@@ -60,7 +60,7 @@ export default function Onboarding() {
     value: TenantOnboardingRequest[K]
   ) => {
     setForm((current) => {
-      if (key === 'companyName') {
+       if (key === 'companyName' && typeof value === 'string') {
         return {
           ...current,
           companyName: value,

@@ -109,12 +109,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("Frontend");
-
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseMiddleware<TenantMiddleware>();
 app.UseAuthorization();
 app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 RecurringJob.AddOrUpdate<ITenantJobRunner>(
     "daily-overdue-invoice-reminders",
