@@ -92,7 +92,7 @@ public class LeadService : ILeadService
     private async Task SendLeadEmailsAsync(Lead lead, CancellationToken cancellationToken)
     {
         var internalHtml = $@"
-            <h2>New CollectFlow Lead</h2>
+            <h2>New CollectFlowAI Lead</h2>
             <p><strong>Name:</strong> {lead.Name}</p>
             <p><strong>Email:</strong> {lead.Email}</p>
             <p><strong>Phone:</strong> {lead.Phone}</p>
@@ -102,20 +102,20 @@ public class LeadService : ILeadService
             <p><strong>Created:</strong> {lead.CreatedAtUtc:u}</p>";
 
         var confirmationHtml = $@"
-            <h2>Thanks for contacting CollectFlow</h2>
+            <h2>Thanks for contacting CollectFlowAI</h2>
             <p>Hi {lead.Name},</p>
             <p>We received your request and will follow up shortly to schedule a demo.</p>
-            <p>Regards,<br/>CollectFlow</p>";
+            <p>Regards,<br/>CollectFlowAI</p>";
 
         await _emailService.SendAsync(
             _emailOptions.NotifyEmail,
-            $"New CollectFlow lead from {lead.Company}",
+            $"New CollectFlowAI lead from {lead.Company}",
             internalHtml,
             cancellationToken);
 
         await _emailService.SendAsync(
             lead.Email,
-            "Your CollectFlow demo request",
+            "Your CollectFlowAI demo request",
             confirmationHtml,
             cancellationToken);
     }
