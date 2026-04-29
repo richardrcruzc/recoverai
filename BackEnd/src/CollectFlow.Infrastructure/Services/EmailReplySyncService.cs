@@ -46,7 +46,22 @@ public class EmailReplySyncService : IEmailReplySyncService
             if (lead is null)
                 continue;
 
-            lead.Stage = "Replied";
+            var body = message.TextBody?.ToLower()
+           ?? message.HtmlBody?.ToLower()
+           ?? "";
+
+            if (body.Contains("yes") || body.Contains("interested"))
+            {
+                lead.Stage = "DemoScheduled";
+            }
+            else if (body.Contains("not interested"))
+            {
+                lead.Stage = "Lost";
+            }
+            else
+            {
+                lead.Stage = "Replied";
+            }
             lead.LastRepliedAtUtc = DateTime.UtcNow;
 
             updated++;
