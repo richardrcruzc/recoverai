@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Header from '../components/Header';
-import { getEmailAutomationJobs, runEmailAutomation } from '../lib/emailAutomationApi';
+import { getEmailAutomationJobs, queueAllLeads, runEmailAutomation } from '../lib/emailAutomationApi';
 import type { EmailAutomationJob, RunEmailAutomationResponse } from '../types/emailAutomation';
 
 function normalizeStatus(status: string | number): string {
@@ -44,6 +44,24 @@ export default function EmailAutomation() {
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<RunEmailAutomationResponse | null>(null);
   const [error, setError] = useState('');
+const [queueing, setQueueing] = useState(false);
+const [queueResult, setQueueResult] = useState<number | null>(null);
+
+  const handleQueueAll = async () => {
+  setQueueing(true);
+  setError('');
+  setQueueResult(null);
+
+  try {
+    const res = await queueAllLeads();
+    setQueueResult(res.queued);
+    await loadJobs(); // refresh
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Failed to queue leads.');
+  } finally {
+    setQueueing(false);
+  }
+};
 
   const metrics = useMemo(() => {
     return {
@@ -108,16 +126,32 @@ export default function EmailAutomation() {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleRun}
-            disabled={running}
-            className="w-full rounded-2xl bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60 sm:w-auto"
-          >
-            {running ? 'Running...' : 'Run Due Emails'}
-          </button>
+           
         </div>
+<div className="flex gap-3">
+  <button
+    type="button"
+    onClick={handleQueueAll}
+    disabled={queueing}
+    className="w-full rounded-2xl border border-slate-300 px-6 py-3 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-60 sm:w-auto"
+  >
+    {queueing ? 'Queueing...' : 'Queue All Leads'}
+  </button>
 
+  <button
+    type="button"
+    onClick={handleRun}
+    disabled={running}
+    className="w-full rounded-2xl bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60 sm:w-auto"
+  >
+    {running ? 'Running...' : 'Run Due Emails'}
+  </button>
+</div>
+{queueResult !== null ? (
+  <div className="mt-4 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-700">
+    Queued {queueResult} leads into email automation.
+  </div>
+) : null}
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             ['Total Jobs', metrics.total],

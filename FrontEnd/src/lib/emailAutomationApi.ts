@@ -40,4 +40,11 @@ export async function runEmailAutomation(): Promise<RunEmailAutomationResponse> 
   return request<RunEmailAutomationResponse>('/api/email-automation/run', {
     method: 'POST'
   });
+
+}
+
+export async function queueAllLeads(): Promise<{ queued: number }> {
+  return request<{ queued: number }>('/api/email-automation/queue-all-leads', {
+    method: 'POST'
+  });
 }

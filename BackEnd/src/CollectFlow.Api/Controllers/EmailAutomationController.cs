@@ -10,10 +10,11 @@ namespace CollectFlow.Api.Controllers;
 public class EmailAutomationController : ControllerBase
 {
     private readonly IEmailAutomationService _emailAutomationService;
-
-    public EmailAutomationController(IEmailAutomationService emailAutomationService)
+    private readonly ILeadService _leadService;
+    public EmailAutomationController(IEmailAutomationService emailAutomationService, ILeadService leadService   )
     {
         _emailAutomationService = emailAutomationService;
+        _leadService = leadService;
     }
 
     [HttpPost("run")]
@@ -28,5 +29,17 @@ public class EmailAutomationController : ControllerBase
     {
         var jobs = await _emailAutomationService.GetJobsAsync(cancellationToken);
         return Ok(jobs);
+    }
+    [HttpPost("queue-all-leads")]
+    public async Task<IActionResult> QueueAllLeads(CancellationToken ct)
+    {
+        var leads = await _leadService.GetAllAsync(ct);
+
+        foreach (var lead in leads)
+        {
+            await _emailAutomationService.QueueLeadSequenceAsync(lead.Id, ct);
+        }
+
+        return Ok(new { queued = leads.Count });
     }
 }
