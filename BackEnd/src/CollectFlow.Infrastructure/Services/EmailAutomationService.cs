@@ -19,7 +19,40 @@ public class EmailAutomationService : IEmailAutomationService
         _db = db;
         _emailService = emailService;
     }
+    public async Task<int> SendLeadCampaignAsync(
+    string campaignKey,
+    string subject,
+    Func<Lead, string> bodyBuilder,
+    CancellationToken ct = default)
+    {
+        var leads = await _db.Leads
+            .Where(x => !string.IsNullOrWhiteSpace(x.Email))
+            .ToListAsync(ct);
 
+        int sent = 0;
+
+        foreach (var lead in leads)
+        {
+            try
+            {
+                var body = bodyBuilder(lead);
+
+                await _emailService.SendAsync(
+                    lead.Email!,
+                    subject,
+                    body,
+                    ct);
+
+                sent++;
+            }
+            catch
+            {
+                // optionally log per-lead failure
+            }
+        }
+
+        return sent;
+    }
     public async Task QueueLeadSequenceAsync(Guid leadId, CancellationToken cancellationToken = default)
     {
         var lead = await _db.Leads

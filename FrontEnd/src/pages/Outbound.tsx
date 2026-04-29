@@ -129,7 +129,7 @@ export default function Outbound() {
         </div>
 
         <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <h2 className="text-xl font-semibold">Send Campaign</h2>
+          <h2 className="text-xl font-semibold">Send Campaign.</h2>
 
           <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-[1fr_160px_auto]">
             <input

@@ -8,5 +8,6 @@ public enum LeadStatus
     DemoScheduled = 4,
     ProposalSent = 5,
     Won = 6,
-    Lost = 7
+    Lost = 7,
+    Replied=8
 }

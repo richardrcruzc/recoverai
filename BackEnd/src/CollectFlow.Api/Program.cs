@@ -135,4 +135,9 @@ RecurringJob.AddOrUpdate<ICollectionsEngineService>(
     service => service.RunAsync(CancellationToken.None),
     "0 8 * * *");
 
+RecurringJob.AddOrUpdate<IEmailReplySyncService>(
+    "sync-email-replies",
+    svc => svc.SyncRepliesAsync(CancellationToken.None),
+    "*/5 * * * *");
+
 app.Run();

@@ -41,6 +41,7 @@ export async function getOutboundEmailSends(): Promise<OutboundEmailSend[]> {
 }
 
 export async function sendOutboundCampaign(campaignId: string, limit = 25): Promise<SendCampaignResponse> {
+  console.log(`Sending campaign ${campaignId} with limit ${limit}`);
   return request<SendCampaignResponse>(`/api/outbound/campaigns/${campaignId}/send?limit=${limit}`, {
     method: 'POST'
   });
