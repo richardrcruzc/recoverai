@@ -26,7 +26,7 @@ public class InvoicesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateInvoiceRequest request)
+    public async Task<IActionResult> Create([FromBody]CreateInvoiceRequest request)
     {
         try
         {

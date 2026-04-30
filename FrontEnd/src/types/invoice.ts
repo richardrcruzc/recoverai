@@ -25,6 +25,5 @@ export type CreateInvoiceRequest = {
   dueDate: string;
   amount: number;
   balance: number;
-  currency: string;
-  status: string | number;
+  currency: string; 
 };

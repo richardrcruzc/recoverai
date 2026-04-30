@@ -39,6 +39,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export async function getInvoices(status?: string): Promise<Invoice[]> {
   const query = status && status !== 'All' ? `?status=${encodeURIComponent(status)}` : '';
+  console.log(`Fetching invoices with status: ${status || 'All'}`);
   return request<Invoice[]>(`/api/invoices${query}`);
 }
 

@@ -19,8 +19,7 @@ const initialForm: CreateInvoiceRequest = {
   dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
   amount: 0,
   balance: 0,
-  currency: 'USD',
-  status: 'Sent'
+  currency: 'USD'
 };
 
 function normalizeStatus(status: string | number): string {
@@ -35,7 +34,7 @@ function normalizeStatus(status: string | number): string {
     6: 'WrittenOff'
   };
 
-  return map[status] ?? 'Sent';
+  return map[status] ?? '2';
 }
 
 function formatMoney(amount: number, currency = 'USD'): string {
@@ -339,18 +338,7 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
                   />
                 </label>
 
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-700">Status</span>
-                  <select
-                    value={String(form.status)}
-                    onChange={(e) => updateForm('status', e.target.value)}
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-slate-900"
-                  >
-                    {invoiceStatuses.filter((x) => x !== 'All').map((status) => (
-                      <option key={status}>{status}</option>
-                    ))}
-                  </select>
-                </label>
+               
               </div>
 
               <button
