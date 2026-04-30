@@ -39,7 +39,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export async function getInvoices(status?: string): Promise<Invoice[]> {
   const query = status && status !== 'All' ? `?status=${encodeURIComponent(status)}` : '';
-  console.log(`Fetching invoices with status: ${status || 'All'}`);
+  console.log(`Request: ${status || 'All'}`);
   return request<Invoice[]>(`/api/invoices${query}`);
 }
 
@@ -51,8 +51,9 @@ export async function createInvoice(input: CreateInvoiceRequest): Promise<Invoic
 }
 
 export async function updateInvoiceStatus(id: string, status: string): Promise<Invoice> {
+  console.log(`Updating invoice ${id} status to ${status}`);
   return request<Invoice>(`/api/invoices/${id}/status`, {
     method: 'PATCH',
-    body: JSON.stringify({ status })
+    body: JSON.stringify({ status: Number(status) })
   });
 }

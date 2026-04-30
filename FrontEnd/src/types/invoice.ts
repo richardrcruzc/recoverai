@@ -12,7 +12,7 @@ export type Invoice = {
   amount: number;
   balance: number;
   currency: string;
-  status: InvoiceStatus;
+  status: string;
   daysOverdue: number;
   createdAtUtc: string;
 };

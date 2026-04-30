@@ -9,7 +9,14 @@ import { isPaywallError } from '../lib/paywall';
 
 const DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 
-const invoiceStatuses = ['All', 'Draft', 'Sent', 'PartiallyPaid', 'Paid', 'Overdue', 'WrittenOff'];
+const invoiceStatuses = [
+  { key: 1, label: 'Draft' },
+  { key: 2, label: 'Sent' },
+  { key: 3, label: 'Partially Paid' },
+  { key: 4, label: 'Paid' },
+  { key: 5, label: 'Overdue' },
+  { key: 6, label: 'Written Off' }
+];
 
 const initialForm: CreateInvoiceRequest = {
   tenantId: DEFAULT_TENANT_ID,
@@ -181,7 +188,7 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
   const handleStatusChange = async (invoice: Invoice, status: string) => {
     setError('');
     setMessage('');
-
+console.log(`Updating invoice ${invoice.id} status to ${status}`);
     try {
       await updateInvoiceStatus(invoice.id, status);
       setMessage('Invoice status updated.');
@@ -212,11 +219,13 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
 
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => setStatusFilter(e.target.value.toString())}
             className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-sm"
           >
             {invoiceStatuses.map((status) => (
-              <option key={status}>{status}</option>
+              <option key={status.key} value={status.key}>
+                {status.label}
+              </option>
             ))}
           </select>
         </div>
@@ -401,14 +410,17 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
                         <td>{formatDate(invoice.dueDate)}</td>
                         <td>{formatMoney(Number(invoice.amount), invoice.currency)}</td>
                         <td>{formatMoney(Number(invoice.balance), invoice.currency)}</td>
+                        <td>status: {invoice.status}</td>
                         <td>
                           <select
-                            value={normalizeStatus(invoice.status)}
+                            value={invoice.status}
                             onChange={(e) => handleStatusChange(invoice, e.target.value)}
                             className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs"
                           >
-                            {invoiceStatuses.filter((x) => x !== 'All').map((status) => (
-                              <option key={status}>{status}</option>
+                            {invoiceStatuses.filter((x) => x.label !== 'All').map((status) => (
+                              <option key={status.key} value={status.key}>
+                                {status.label}
+                              </option>
                             ))}
                           </select>
                         </td>

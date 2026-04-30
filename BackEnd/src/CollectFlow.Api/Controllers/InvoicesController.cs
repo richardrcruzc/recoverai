@@ -49,7 +49,7 @@ public class InvoicesController : ControllerBase
     }
 
     [HttpPatch("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(Guid id, UpdateInvoiceStatusRequest request)
+    public async Task<IActionResult> UpdateStatus(Guid id,UpdateInvoiceStatusRequest request)
     {
         var result = await _service.UpdateStatusAsync(id, request);
         return result == null ? NotFound() : Ok(result);
