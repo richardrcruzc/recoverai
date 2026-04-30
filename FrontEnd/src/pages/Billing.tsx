@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { getBillingSummary } from '../lib/billingApi';
+import { getBillingSummary, startStripeCheckout } from '../lib/billingApi';
 import type { BillingSummary } from '../types/billing';
 
 function money(value: number) {
@@ -69,6 +69,13 @@ export default function Billing() {
           </>
         )}
       </main>
+      <button
+  type="button"
+  onClick={() => startStripeCheckout()}
+  className="mt-6 rounded-2xl bg-slate-900 px-6 py-3 text-sm font-medium text-white"
+>
+  Upgrade to Pro
+</button>
     </div>
   );
 }
