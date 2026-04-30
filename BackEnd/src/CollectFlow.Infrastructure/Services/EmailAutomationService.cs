@@ -163,32 +163,32 @@ public class EmailAutomationService : IEmailAutomationService
             "lead-nurture-day-0" => "Your unpaid invoices are waiting",
             "lead-nurture-day-2" => "Most businesses lose money through inconsistent follow-up",
             "lead-nurture-day-5" => "Still chasing invoices manually?",
-            _ => "RecoverAI follow-up"
+            _ => "CollectFlowAI follow-up"
         };
 
         var body = campaignKey switch
         {
             "lead-nurture-day-0" => $@"
-                <h2>Thanks for checking out RecoverAI</h2>
+                <h2>Thanks for checking out CollectFlowAI</h2>
                 <p>Hi {lead.Name},</p>
                 <p>Most businesses do not have a collections problem. They have a follow-up problem.</p>
-                <p>RecoverAI helps you prioritize overdue invoices, automate reminders, and track recovered payments.</p>
-                <p><a href=""https://recoverai.net/demo"">Try the demo</a></p>",
+                <p>CollectFlowAI helps you prioritize overdue invoices, automate reminders, and track recovered payments.</p>
+                <p><a href=""https://collectflowai.com/demo"">Try the demo</a></p>",
 
             "lead-nurture-day-2" => $@"
                 <h2>Invoice follow-up should not depend on memory</h2>
                 <p>Hi {lead.Name},</p>
                 <p>Late invoices often stay unpaid because follow-ups are inconsistent or uncomfortable.</p>
-                <p>RecoverAI gives you an AI priority queue and automated reminder workflow.</p>
-                <p><a href=""https://recoverai.net/onboarding"">Create your workspace</a></p>",
+                <p>CollectFlowAI gives you an AI priority queue and automated reminder workflow.</p>
+                <p><a href=""https://collectflowai.com/onboarding"">Create your workspace</a></p>",
 
             "lead-nurture-day-5" => $@"
                 <h2>Every overdue invoice has a next best action</h2>
                 <p>Hi {lead.Name},</p>
-                <p>RecoverAI shows who to follow up with first, what is overdue, and how much is recoverable.</p>
-                <p><a href=""https://recoverai.net/onboarding"">Start setup</a></p>",
+                <p>CollectFlowAI shows who to follow up with first, what is overdue, and how much is recoverable.</p>
+                <p><a href=""https://collectflowai.com/onboarding"">Start setup</a></p>",
 
-            _ => "<p>RecoverAI follow-up</p>"
+            _ => "<p>CollectFlowAI follow-up</p>"
         };
 
         return new EmailAutomationJob

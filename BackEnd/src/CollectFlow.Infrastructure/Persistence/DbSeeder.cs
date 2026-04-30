@@ -17,7 +17,7 @@ public static class DbSeeder
 
         await dbContext.Database.MigrateAsync();
 
-        var tenantSlug = "recoverai-demo";
+        var tenantSlug = "CollectFlowAI-demo";
 
         var tenant = await dbContext.Tenants
             .IgnoreQueryFilters()
@@ -26,7 +26,7 @@ public static class DbSeeder
         {
             tenant = new Tenant
             {
-                Name = "RecoverAI Demo",
+                Name = "CollectFlowAI Demo",
                 Slug = tenantSlug,
                 IsActive = true
             };
@@ -36,7 +36,7 @@ public static class DbSeeder
         }
 
 
-        var adminEmail = "admin@recoverai.net";
+        var adminEmail = "admin@CollectFlowAI.com";
 
         var adminExists = await dbContext.AdminUsers
             .IgnoreQueryFilters()
@@ -47,7 +47,7 @@ public static class DbSeeder
             var admin = new AdminUser
             {
                 TenantId = tenant.Id,
-                FullName = "RecoverAI Admin",
+                FullName = "CollectFlowAI Admin",
                 Email = adminEmail,
                 Role = AdminUserRole.Admin,
                 IsActive = true

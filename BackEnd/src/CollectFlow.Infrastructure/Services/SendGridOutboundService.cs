@@ -32,7 +32,7 @@ public class SendGridOutboundService : ISendGridOutboundService
 
         message.AddContent(MimeType.Html, htmlBody + $@"
             <p style=""font-size:12px;color:#666;margin-top:24px;"">
-              RecoverAI<br/>
+              CollectFlowAI<br/>
               To unsubscribe, <a href=""{unsubscribeUrl}"">click here</a>.
             </p>");
 

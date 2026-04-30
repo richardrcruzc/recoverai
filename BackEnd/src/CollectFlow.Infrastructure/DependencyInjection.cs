@@ -48,7 +48,7 @@ public static class DependencyInjection
         {
             client.Timeout = TimeSpan.FromSeconds(15);
             client.DefaultRequestHeaders.UserAgent.ParseAdd(
-                "RecoverAI-LeadResearchBot/1.0 (+https://recoverai.net)");
+                "CollectFlowAI-LeadResearchBot/1.0 (+https://CollectFlowAI.com)");
         });
         services.AddScoped<IInvoiceImportService, InvoiceImportService>();
         services.AddScoped<ILeadImportService, LeadImportService>();

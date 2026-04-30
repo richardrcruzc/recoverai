@@ -25,6 +25,6 @@ public class UnsubscribeController : ControllerBase
             await _db.SaveChangesAsync();
         }
 
-        return Content("You have been unsubscribed from RecoverAI outreach emails.");
+        return Content("You have been unsubscribed from CollectFlowAI outreach emails.");
     }
 }
