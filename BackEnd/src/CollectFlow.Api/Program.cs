@@ -1,3 +1,4 @@
+using CollectFlow.Api.Infrastructure.Hangfire;
 using CollectFlow.Api.Middleware;
 using CollectFlow.Api.Options;
 using CollectFlow.Api.Services;
@@ -17,6 +18,12 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.WebHost.UseSentry(o =>
+//{
+//    o.Dsn = "https://www.collectflowai.com/@sentry.io/PROJECT_ID";
+//    o.TracesSampleRate = 0.2;
+//});
 
 builder.Services.AddRateLimiter(options =>
 {
@@ -103,6 +110,37 @@ builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
+app.Use(async (ctx, next) =>
+{
+    var start = DateTime.UtcNow;
+
+    await next();
+
+    var elapsed = (DateTime.UtcNow - start).TotalMilliseconds;
+
+    Console.WriteLine($"{ctx.Request.Method} {ctx.Request.Path} -> {ctx.Response.StatusCode} in {elapsed}ms");
+});
+app.UseExceptionHandler(appErr =>
+{
+    appErr.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var ex = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+
+        Console.WriteLine(ex?.ToString());
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "Internal server error"
+        });
+    });
+});
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new DashboardAuthFilter() }
+});
 app.UseRateLimiter();
 
 if (app.Environment.IsDevelopment())

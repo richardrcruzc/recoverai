@@ -96,7 +96,7 @@ public class BillingController : ControllerBase
             return BadRequest();
         }
 
-        if (stripeEvent.Type == Events.CheckoutSessionCompleted)
+        if (stripeEvent.Type == "checkout.session.completed")
         {
             var session = stripeEvent.Data.Object as Session;
 
@@ -121,7 +121,7 @@ public class BillingController : ControllerBase
             }
         }
 
-        if (stripeEvent.Type == Events.CustomerSubscriptionDeleted)
+        if (stripeEvent.Type == "customer.subscription.deleted")
         {
             var stripeSub = stripeEvent.Data.Object as Subscription;
 
