@@ -20,3 +20,9 @@ export type RunEmailAutomationResponse = {
   failed: number;
   skipped: number;
 };
+
+export type QueueLeadBatchResponse = {
+  evaluated: number;
+  queued: number;
+  skipped: number;
+};

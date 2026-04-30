@@ -1,4 +1,5 @@
-﻿using CollectFlow.Application.Interfaces;
+﻿using CollectFlow.Application.DTOs.EmailAutomation;
+using CollectFlow.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,5 +42,16 @@ public class EmailAutomationController : ControllerBase
         }
 
         return Ok(new { queued = leads.Count });
+    }
+    [HttpPost("queue-lead-batch")]
+    public async Task<IActionResult> QueueLeadBatch(
+    [FromBody] QueueLeadBatchRequest request,
+    CancellationToken cancellationToken)
+    {
+        var result = await _emailAutomationService.QueueLeadBatchAsync(
+            request,
+            cancellationToken);
+
+        return Ok(result);
     }
 }

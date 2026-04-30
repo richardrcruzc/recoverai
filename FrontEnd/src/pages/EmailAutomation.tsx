@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import Header from '../components/Header';
-import { getEmailAutomationJobs, queueAllLeads, runEmailAutomation } from '../lib/emailAutomationApi';
-import type { EmailAutomationJob, RunEmailAutomationResponse } from '../types/emailAutomation';
-
+import { getEmailAutomationJobs, runEmailAutomation, queueLeadBatch, queueAllLeads } from '../lib/emailAutomationApi'; 
+import type {
+  EmailAutomationJob,
+  RunEmailAutomationResponse,
+  QueueLeadBatchResponse
+} from '../types/emailAutomation';
 function normalizeStatus(status: string | number): string {
   if (typeof status === 'string') return status;
 
@@ -46,6 +49,24 @@ export default function EmailAutomation() {
   const [error, setError] = useState('');
 const [queueing, setQueueing] = useState(false);
 const [queueResult, setQueueResult] = useState<number | null>(null);
+const [batching, setBatching] = useState(false);
+const [batchResult, setBatchResult] = useState<QueueLeadBatchResponse | null>(null);
+
+const handleQueueBatch = async () => {
+  setBatching(true);
+  setError('');
+  setBatchResult(null);
+
+  try {
+    const response = await queueLeadBatch(50);
+    setBatchResult(response);
+    await loadJobs();
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Could not queue lead batch.');
+  } finally {
+    setBatching(false);
+  }
+};
 
   const handleQueueAll = async () => {
   setQueueing(true);
@@ -146,6 +167,14 @@ const [queueResult, setQueueResult] = useState<number | null>(null);
   >
     {running ? 'Running...' : 'Run Due Emails'}
   </button>
+  <button
+  type="button"
+  onClick={handleQueueBatch}
+  disabled={batching}
+  className="w-full rounded-2xl border border-slate-300 px-6 py-3 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-60 sm:w-auto"
+>
+  {batching ? 'Queueing...' : 'Queue 50 Leads'}
+</button>
 </div>
 {queueResult !== null ? (
   <div className="mt-4 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-700">
@@ -199,7 +228,11 @@ const [queueResult, setQueueResult] = useState<number | null>(null);
               Refresh
             </button>
           </div>
-
+{batchResult ? (
+  <div className="mt-6 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-700">
+    Evaluated {batchResult.evaluated} leads. Queued {batchResult.queued}. Skipped {batchResult.skipped}.
+  </div>
+) : null}
           {loading ? (
             <p className="mt-6 text-slate-600">Loading jobs...</p>
           ) : (

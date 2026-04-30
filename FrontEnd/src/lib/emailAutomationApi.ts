@@ -1,5 +1,9 @@
-import { getToken } from './auth';
-import type { EmailAutomationJob, RunEmailAutomationResponse } from '../types/emailAutomation';
+import { getToken } from './auth'; 
+import type {
+  EmailAutomationJob,
+  RunEmailAutomationResponse,
+  QueueLeadBatchResponse
+} from '../types/emailAutomation';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
 
@@ -46,5 +50,12 @@ export async function runEmailAutomation(): Promise<RunEmailAutomationResponse> 
 export async function queueAllLeads(): Promise<{ queued: number }> {
   return request<{ queued: number }>('/api/email-automation/queue-all-leads', {
     method: 'POST'
+  });
+}
+
+export async function queueLeadBatch(batchSize = 50): Promise<QueueLeadBatchResponse> {
+  return request<QueueLeadBatchResponse>('/api/email-automation/queue-lead-batch', {
+    method: 'POST',
+    body: JSON.stringify({ batchSize })
   });
 }

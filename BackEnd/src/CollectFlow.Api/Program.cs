@@ -1,6 +1,7 @@
 using CollectFlow.Api.Middleware;
 using CollectFlow.Api.Options;
 using CollectFlow.Api.Services;
+using CollectFlow.Application.DTOs.EmailAutomation;
 using CollectFlow.Application.DTOs.Reminders;
 using CollectFlow.Application.Interfaces;
 using CollectFlow.Infrastructure;
@@ -139,5 +140,15 @@ RecurringJob.AddOrUpdate<IEmailReplySyncService>(
     "sync-email-replies",
     svc => svc.SyncRepliesAsync(CancellationToken.None),
     "*/5 * * * *");
+
+RecurringJob.AddOrUpdate<IEmailAutomationService>(
+    "queue-daily-lead-email-batch",
+    service => service.QueueLeadBatchAsync(
+        new QueueLeadBatchRequest
+        {
+            BatchSize = 50
+        },
+        CancellationToken.None),
+    "0 9 * * 1-5");
 
 app.Run();

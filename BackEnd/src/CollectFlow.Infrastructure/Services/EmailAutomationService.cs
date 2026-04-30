@@ -204,4 +204,46 @@ public class EmailAutomationService : IEmailAutomationService
             Status = EmailAutomationStatus.Pending
         };
     }
+    public async Task<QueueLeadBatchResponse> QueueLeadBatchAsync(
+    QueueLeadBatchRequest request,
+    CancellationToken cancellationToken = default)
+    {
+        var batchSize = request.BatchSize <= 0 ? 50 : Math.Min(request.BatchSize, 50);
+
+        var leads = await _db.Leads
+            .IgnoreQueryFilters()
+            .Where(x => !string.IsNullOrWhiteSpace(x.Email))
+            .OrderBy(x => x.CreatedAtUtc)
+            .Take(batchSize * 3)
+            .ToListAsync(cancellationToken);
+
+        var response = new QueueLeadBatchResponse
+        {
+            Evaluated = leads.Count
+        };
+
+        foreach (var lead in leads)
+        {
+            if (response.Queued >= batchSize)
+                break;
+
+            var alreadyQueued = await _db.EmailAutomationJobs
+                .IgnoreQueryFilters()
+                .AnyAsync(x =>
+                    x.LeadId == lead.Id &&
+                    x.CampaignKey.StartsWith("lead-nurture"),
+                    cancellationToken);
+
+            if (alreadyQueued)
+            {
+                response.Skipped++;
+                continue;
+            }
+
+            await QueueLeadSequenceAsync(lead.Id, cancellationToken);
+            response.Queued++;
+        }
+
+        return response;
+    }
 }

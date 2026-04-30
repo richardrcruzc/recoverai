@@ -13,4 +13,8 @@ public interface IEmailAutomationService
      string subject,
      Func<Lead, string> bodyBuilder,
      CancellationToken ct = default);
+
+    Task<QueueLeadBatchResponse> QueueLeadBatchAsync(
+    QueueLeadBatchRequest request,
+    CancellationToken cancellationToken = default);
 }
