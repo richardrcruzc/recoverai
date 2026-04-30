@@ -16,3 +16,14 @@ export async function getRecoverySummary(): Promise<RecoverySummary> {
 
   return res.json();
 }
+export async function getSalesFunnel() {
+  const res = await fetch(`${API_BASE_URL}/api/reports/sales-funnel`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  });
+
+  if (!res.ok) throw new Error('Failed to load funnel');
+
+  return res.json();
+}
