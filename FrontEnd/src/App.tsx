@@ -28,6 +28,7 @@ import LeadImport from './pages/LeadImport';
 import SalesDashboard from './pages/SalesDashboard'; 
 import Compliance from './pages/Compliance';
 import Unsubscribe from './pages/Unsubscribe';
+import LeadsPipeline from './pages/LeadsPipeline';
 
 
 <Route
@@ -52,6 +53,14 @@ export default function App() {
       <Route path="/compliance" element={<Compliance />} />
 <Route path="/unsubscribe" element={<Unsubscribe />} />
 
+<Route
+  path="/leads-pipeline"
+  element={
+    <ProtectedRoute>
+      <LeadsPipeline />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/sales"
   element={
