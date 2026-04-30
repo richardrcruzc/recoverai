@@ -53,7 +53,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceImportService, InvoiceImportService>();
         services.AddScoped<ILeadImportService, LeadImportService>();
         services.AddScoped<IEmailComplianceService, EmailComplianceService>();
-
+        services.AddScoped<ILeadPipelineService, LeadPipelineService>();
 
         return services;
     }
