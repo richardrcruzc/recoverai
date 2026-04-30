@@ -14,4 +14,5 @@ public class LeadResponse
     public string Source { get; set; } = string.Empty;
     public LeadStatus Status { get; set; }
     public DateTime CreatedAtUtc { get; set; }
+    public LeadStage Stage { get; set; }
 }

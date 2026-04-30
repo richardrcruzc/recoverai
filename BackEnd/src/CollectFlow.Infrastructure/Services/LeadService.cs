@@ -68,7 +68,9 @@ public class LeadService : ILeadService
                 BiggestProblem = x.BiggestProblem,
                 Source = x.Source,
                 Status = x.Status,
-                CreatedAtUtc = x.CreatedAtUtc
+                CreatedAtUtc = x.CreatedAtUtc,
+                Stage = x.Stage,
+               
             })
             .ToListAsync(cancellationToken);
     }

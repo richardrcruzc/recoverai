@@ -75,38 +75,54 @@ export default function LeadsPipeline() {
     void loadLeads();
   }, []);
 
-  const handleStageChange = async (leadId: string, stage: number) => {
-    setSavingId(leadId);
-    setError('');
+ const handleStageChange = async (leadId: string, stage: number) => {
+  setSavingId(leadId);
+  setError('');
 
-    try {
-      await updateLeadStage(leadId, stage);
-      await loadLeads();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not update lead stage.');
-    } finally {
-      setSavingId(null);
-    }
-  };
+  // optimistic update (instant UI move)
+  setLeads((current) =>
+    current.map((lead) =>
+      lead.id === leadId ? { ...lead, stage } : lead
+    )
+  );
 
-  const handleAddNote = async (leadId: string) => {
-    const note = notesByLead[leadId]?.trim();
+  try {
+    await updateLeadStage(leadId, stage);
+    // ❌ DO NOT call loadLeads() here
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Could not update lead stage.');
 
-    if (!note) return;
+    // rollback if failed
+    await loadLeads();
+  } finally {
+    setSavingId(null);
+  }
+};
 
-    setSavingId(leadId);
-    setError('');
+ const handleAddNote = async (leadId: string) => {
+  const note = notesByLead[leadId]?.trim();
+  if (!note) return;
 
-    try {
-      await addLeadNote(leadId, note);
-      setNotesByLead((current) => ({ ...current, [leadId]: '' }));
-      await loadLeads();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not add note.');
-    } finally {
-      setSavingId(null);
-    }
-  };
+  setSavingId(leadId);
+
+  try {
+    await addLeadNote(leadId, note);
+
+    setLeads((current) =>
+      current.map((lead) =>
+        lead.id === leadId
+          ? { ...lead, notes: (lead.notes || '') + '\n\n' + note }
+          : lead
+      )
+    );
+
+    setNotesByLead((c) => ({ ...c, [leadId]: '' }));
+  } catch {
+    await loadLeads();
+  } finally {
+    setSavingId(null);
+  }
+};
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">

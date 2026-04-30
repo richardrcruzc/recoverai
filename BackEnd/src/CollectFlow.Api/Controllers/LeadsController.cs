@@ -56,10 +56,10 @@ public class LeadsController : ControllerBase
     [HttpPatch("{id:guid}/stage")]
     public async Task<IActionResult> UpdateStage(
     Guid id,
-    [FromBody] int stage,
+    [FromBody] UpdateLeadStageRequest request,
     CancellationToken ct)
     {
-        var success = await _pipeline.UpdateStageAsync(id, (LeadStage)stage, ct);
+        var success = await _pipeline.UpdateStageAsync(id, (LeadStage)request.Stage, ct);
 
         return success ? NoContent() : NotFound();
     }

@@ -15,7 +15,9 @@ const mainLinks = [
   { to: '/customers', label: 'Customers' },
   { to: '/invoices', label: 'Invoices' },
   { to: '/payments', label: 'Payments' },
-  { to: '/collections', label: 'Collections' }
+  { to: '/collections', label: 'Collections' },
+  { to: '/leads-pipeline', label: 'Leads Pipeline' }
+
 ];
 
 const automationLinks = [

@@ -47,7 +47,7 @@ export async function getLeads(): Promise<Lead[]> {
 export async function updateLeadStage(leadId: string, stage: number): Promise<void> {
   await request<void>(`/api/leads/${leadId}/stage`, {
     method: 'PATCH',
-    body: JSON.stringify(stage)
+    body: JSON.stringify({ stage })
   });
 }
 
