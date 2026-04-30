@@ -37,6 +37,10 @@ export default function SalesDashboard() {
           <Card label="Recovered $" value={data.totalRecovered} />
           <Card label="Fees $" value={data.totalFees} />
         </div>
+         <div className="mt-8 grid grid-cols-2 gap-4">
+            <Card label="Emails Sent" value={data.emailsSent} />
+            <Card label="Reply Rate" value={(data.replyRate * 100).toFixed(1) + '%'} />
+         </div>
       </div>
     </div>
   );

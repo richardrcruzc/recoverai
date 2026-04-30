@@ -17,17 +17,25 @@ public class ReportsService : IReportsService
     public async Task<SalesFunnelResponse> GetSalesFunnelAsync(CancellationToken ct)
     {
         var leads = await _db.Leads.CountAsync(ct);
-        var contacted = await _db.Leads.CountAsync(x => x.Stage=="Contacted", ct);
-        var replied = await _db.Leads.CountAsync(x => x.Stage =="Replied", ct);
-        var demos = await _db.Leads.CountAsync(x => x.Stage =="DemoScheduled", ct);
-        var activated = await _db.Leads.CountAsync(x => x.Stage =="Activated", ct);
-        var paying = await _db.Leads.CountAsync(x => x.Stage =="PayingCustomer", ct);
+        var contacted = await _db.Leads.CountAsync(x => x.Stage== LeadStage.Contacted, ct);
+        var replied = await _db.Leads.CountAsync(x => x.Stage == LeadStage.Replied, ct);
+        var demos = await _db.Leads.CountAsync(x => x.Stage == LeadStage.DemoScheduled, ct);
+        var activated = await _db.Leads.CountAsync(x => x.Stage == LeadStage.Activated, ct);
+        var paying = await _db.Leads.CountAsync(x => x.Stage == LeadStage.PayingCustomer, ct);
 
         var totalRecovered = await _db.Payments
      .SumAsync(x => (decimal?)x.Amount, ct) ?? 0;
 
         var totalFees = await _db.RecoveryFees
             .SumAsync(x => (decimal?)x.FeeAmount, ct) ?? 0;
+
+        var emailsSent = await _db.EmailAutomationJobs
+    .CountAsync(x => x.Status == EmailAutomationStatus.Sent, ct);
+
+        //var replies = await _db.Leads
+        //    .CountAsync(x => x.Stage >= LeadStage.Replied, ct);
+
+       // var replyRate = emailsSent == 0 ? 0 : (double)replies / emailsSent;
 
         return new SalesFunnelResponse
         {
@@ -40,10 +48,11 @@ public class ReportsService : IReportsService
             TotalRecovered = totalRecovered,
             TotalFees = totalFees,
 
-            ReplyRate = leads == 0 ? 0 : (double)replied / leads,
+            ReplyRate = leads == 0 ? 0 : (double)replied / emailsSent,
             DemoRate = replied == 0 ? 0 : (double)demos / replied,
             ActivationRate = demos == 0 ? 0 : (double)activated / demos,
-            ConversionRate = leads == 0 ? 0 : (double)paying / leads
+            ConversionRate = leads == 0 ? 0 : (double)paying / leads,
+            
         };
     }
     public async Task<RecoverySummaryResponse> GetRecoverySummaryAsync(

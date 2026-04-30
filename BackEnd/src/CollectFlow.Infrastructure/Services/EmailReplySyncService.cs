@@ -52,15 +52,15 @@ public class EmailReplySyncService : IEmailReplySyncService
 
             if (body.Contains("yes") || body.Contains("interested"))
             {
-                lead.Stage = "DemoScheduled";
+                lead.Stage = LeadStage.DemoScheduled;
             }
             else if (body.Contains("not interested"))
             {
-                lead.Stage = "Lost";
+                lead.Stage = LeadStage.Lost;
             }
             else
             {
-                lead.Stage = "Replied";
+                lead.Stage = LeadStage.Replied;
             }
             lead.LastRepliedAtUtc = DateTime.UtcNow;
 

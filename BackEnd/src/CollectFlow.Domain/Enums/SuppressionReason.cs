@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace CollectFlow.Domain.Enums;
 
-namespace CollectFlow.Domain.Enums
+public enum SuppressionReason
 {
-    internal class SuppressionReason
-    {
-    }
+    Unsubscribed = 1,
+    Bounced = 2,
+    Complaint = 3,
+    ManualBlock = 4
 }

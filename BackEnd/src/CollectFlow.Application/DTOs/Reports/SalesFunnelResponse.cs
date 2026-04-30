@@ -9,6 +9,8 @@ public class SalesFunnelResponse
     public int Activated { get; set; }
     public int PayingCustomers { get; set; }
 
+    public int EmailsSent { get; set; }
+
     public decimal TotalRecovered { get; set; }
     public decimal TotalFees { get; set; }
 

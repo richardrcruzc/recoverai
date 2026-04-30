@@ -26,6 +26,8 @@ import Privacy from './pages/Privacy';
 import AcceptableUse from './pages/AcceptableUse';
 import LeadImport from './pages/LeadImport';
 import SalesDashboard from './pages/SalesDashboard'; 
+import Compliance from './pages/Compliance';
+import Unsubscribe from './pages/Unsubscribe';
 
 
 <Route
@@ -45,8 +47,10 @@ export default function App() {
       <Route path="/demo" element={<Demo />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/terms" element={<Terms />} />
-<Route path="/privacy" element={<Privacy />} />
-<Route path="/acceptable-use" element={<AcceptableUse />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/acceptable-use" element={<AcceptableUse />} />
+      <Route path="/compliance" element={<Compliance />} />
+<Route path="/unsubscribe" element={<Unsubscribe />} />
 
 <Route
   path="/sales"

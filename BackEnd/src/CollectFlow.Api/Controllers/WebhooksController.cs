@@ -27,7 +27,7 @@ public class InstantlyWebhookController : ControllerBase
 
         if (lead != null)
         {
-            lead.Stage = "Replied";
+            lead.Stage = LeadStage.Replied;
             lead.LastRepliedAtUtc = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();

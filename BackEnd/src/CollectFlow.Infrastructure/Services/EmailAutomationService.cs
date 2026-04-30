@@ -112,11 +112,32 @@ public class EmailAutomationService : IEmailAutomationService
                     response.Skipped++;
                     continue;
                 }
+                if (await _emailComplianceService.IsSuppressedAsync(job.RecipientEmail, cancellationToken))
+                {
+                    job.Status = EmailAutomationStatus.Skipped;
+                    job.ErrorMessage = "Recipient is unsubscribed or suppressed.";
+                    response.Skipped++;
+                    continue;
+                }
+
+                var unsubscribeUrl = await _emailComplianceService.CreateUnsubscribeUrlAsync(
+                    job.RecipientEmail,
+                    cancellationToken);
+
+                var bodyWithFooter = $@"
+{job.BodyHtml}
+
+<hr />
+<p style=""font-size:12px;color:#64748b;"">
+You are receiving this email because you contacted or interacted with CollectFlowAI.
+<br />
+<a href=""{unsubscribeUrl}"">Unsubscribe</a>
+</p>";
 
                 await _emailService.SendAsync(
                     job.RecipientEmail,
                     job.Subject,
-                    job.BodyHtml,
+                    bodyWithFooter,
                     cancellationToken);
 
                 job.Status = EmailAutomationStatus.Sent;

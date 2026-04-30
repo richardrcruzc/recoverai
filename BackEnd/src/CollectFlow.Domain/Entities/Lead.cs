@@ -1,5 +1,6 @@
 using CollectFlow.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Xml;
 
 namespace CollectFlow.Domain.Entities;
 
@@ -17,7 +18,7 @@ public class Lead : BaseEntity
     public string BiggestProblem { get; set; } = string.Empty;
     public string Source { get; set; } = "landing-page";
     public LeadStatus Status { get; set; } = LeadStatus.New;
-    public string Stage { get; set; } = "New";
+    public LeadStage Stage { get; set; } = LeadStage.New;
     // New, Contacted, Qualified, Activated, Converted, Lost
 
     public int Score { get; set; } = 0;
