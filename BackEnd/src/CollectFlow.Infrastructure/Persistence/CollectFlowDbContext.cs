@@ -13,6 +13,8 @@ public class CollectFlowDbContext : DbContext
     {
         _tenantContext = tenantContext;
     }
+    public DbSet<EmailSuppression> EmailSuppressions => Set<EmailSuppression>();
+    public DbSet<EmailUnsubscribeToken> EmailUnsubscribeTokens => Set<EmailUnsubscribeToken>();
     public DbSet<ConsentRecord> ConsentRecords => Set<ConsentRecord>();
     public DbSet<LeadSourceJob> LeadSourceJobs => Set<LeadSourceJob>();
     public DbSet<OutboundContact> OutboundContacts => Set<OutboundContact>();
@@ -38,6 +40,25 @@ public class CollectFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<EmailSuppression>(entity =>
+        {
+            entity.ToTable("EmailSuppressions");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Email).HasMaxLength(256).IsRequired();
+            entity.Property(x => x.Reason).HasConversion<int>().IsRequired();
+            entity.Property(x => x.Source).HasMaxLength(100);
+            entity.HasIndex(x => x.Email).IsUnique();
+        });
+
+        modelBuilder.Entity<EmailUnsubscribeToken>(entity =>
+        {
+            entity.ToTable("EmailUnsubscribeTokens");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Email).HasMaxLength(256).IsRequired();
+            entity.Property(x => x.Token).HasMaxLength(200).IsRequired();
+            entity.HasIndex(x => x.Token).IsUnique();
+        });
 
         modelBuilder.Entity<ConsentRecord>(entity =>
         {

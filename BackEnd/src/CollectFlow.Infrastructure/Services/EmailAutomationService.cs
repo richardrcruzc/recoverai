@@ -11,13 +11,15 @@ public class EmailAutomationService : IEmailAutomationService
 {
     private readonly CollectFlowDbContext _db;
     private readonly IEmailService _emailService;
-
+    private readonly IEmailComplianceService _emailComplianceService;   
     public EmailAutomationService(
         CollectFlowDbContext db,
-        IEmailService emailService)
+        IEmailService emailService,
+        IEmailComplianceService emailComplianceService)
     {
         _db = db;
         _emailService = emailService;
+        _emailComplianceService = emailComplianceService;
     }
     public async Task<int> SendLeadCampaignAsync(
     string campaignKey,
