@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import logo from '../assets/collectflowai-logo.png';
-import { getToken, logout } from '../lib/auth';
+import { getToken, logout } from '../lib/auth'; 
 
 const publicLinks = [
   { to: '/#pricing', label: 'Pricing' },
@@ -69,21 +69,116 @@ function DesktopDropdown({
   label: string;
   links: { to: string; label: string }[];
 }) {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const menuId = `${label.toLowerCase().replace(/\s+/g, '-')}-menu`;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!wrapperRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
+  const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setOpen(true);
+
+      window.setTimeout(() => {
+        const firstLink = wrapperRef.current?.querySelector<HTMLAnchorElement>('a');
+        firstLink?.focus();
+      }, 0);
+    }
+  };
+
+  const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const items = Array.from(
+      wrapperRef.current?.querySelectorAll<HTMLAnchorElement>('a') ?? []
+    );
+
+    const currentIndex = items.findIndex((item) => item === document.activeElement);
+
+    if (event.key === 'Escape') {
+      setOpen(false);
+      wrapperRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const next = items[currentIndex + 1] ?? items[0];
+      next?.focus();
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const previous = items[currentIndex - 1] ?? items[items.length - 1];
+      previous?.focus();
+    }
+  };
+
   return (
-    <div className="group relative">
+    <div ref={wrapperRef} className="relative">
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={() => setOpen((value) => !value)}
+        onKeyDown={handleButtonKeyDown}
+        className={`inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition ${
+          open
+            ? 'bg-slate-900 text-white'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        }`}
       >
         {label}
-        <ChevronDown className="h-4 w-4" />
+        <ChevronDown className={`h-4 w-4 transition ${open ? 'rotate-180' : ''}`} />
       </button>
 
-      <div className="invisible absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
-        {links.map((link) => (
-          <NavItem key={link.to} {...link} />
-        ))}
-      </div>
+      {open ? (
+        <div
+          id={menuId}
+          role="menu"
+          tabIndex={-1}
+          onKeyDown={handleMenuKeyDown}
+          className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl"
+        >
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              role="menuitem"
+              tabIndex={0}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `block rounded-xl px-3 py-2 text-sm font-medium transition ${
+                  isActive
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:bg-slate-100 focus:outline-none'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
