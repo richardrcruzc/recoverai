@@ -1,5 +1,6 @@
 using CollectFlow.Application.DTOs.Leads;
 using CollectFlow.Application.Interfaces;
+using CollectFlow.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -11,10 +12,12 @@ namespace CollectFlow.Api.Controllers;
 public class LeadsController : ControllerBase
 {
     private readonly ILeadService _leadService;
+    private readonly ILeadPipelineService _pipeline;
 
-    public LeadsController(ILeadService leadService)
+    public LeadsController(ILeadService leadService, ILeadPipelineService pipeline)
     {
         _leadService = leadService;
+        _pipeline = pipeline;
     }
 
     // Public endpoint. Landing page visitors can submit demo requests.
@@ -49,6 +52,27 @@ public class LeadsController : ControllerBase
     {
         var updated = await _leadService.UpdateStatusAsync(id, request.Status, cancellationToken);
         return updated ? NoContent() : BadRequest(new { message = "Lead not found or invalid status." });
+    }
+    [HttpPatch("{id:guid}/stage")]
+    public async Task<IActionResult> UpdateStage(
+    Guid id,
+    [FromBody] int stage,
+    CancellationToken ct)
+    {
+        var success = await _pipeline.UpdateStageAsync(id, (LeadStage)stage, ct);
+
+        return success ? NoContent() : NotFound();
+    }
+
+    [HttpPatch("{id:guid}/note")]
+    public async Task<IActionResult> AddNote(
+        Guid id,
+        [FromBody] string note,
+        CancellationToken ct)
+    {
+        var success = await _pipeline.AddNoteAsync(id, note, ct);
+
+        return success ? NoContent() : NotFound();
     }
 }
 

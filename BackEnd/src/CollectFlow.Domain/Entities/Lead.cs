@@ -26,4 +26,5 @@ public class Lead : BaseEntity
     public DateTime? LastContactedAtUtc { get; set; }
     public DateTime? LastRepliedAtUtc { get; set; }
     public string Message { get; set; } = "New";
+    public string Notes { get; set; }
 }
