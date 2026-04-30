@@ -12,6 +12,7 @@ export default function Footer() {
           <Link to="/terms" className="hover:text-slate-900">Terms</Link>
           <Link to="/privacy" className="hover:text-slate-900">Privacy</Link>
           <Link to="/acceptable-use" className="hover:text-slate-900">Acceptable Use</Link>
+          <Link to="/compliance" className="hover:text-slate-900">Compliance</Link>
         </div>
       </div>
     </footer>

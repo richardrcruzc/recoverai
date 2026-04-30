@@ -13,7 +13,7 @@ export default function Terms() {
 
         <div className="mt-8 space-y-6 rounded-3xl bg-white p-6 leading-7 shadow-sm">
           <Section title="1. Overview">
-            CollectFlowAIprovides software that helps businesses manage outstanding invoices through automated workflows, communications, analytics, and recovery tracking.
+            CollectFlowAI provides software that helps businesses manage outstanding invoices through automated workflows, communications, analytics, and recovery tracking.
           </Section>
 
           <Section title="2. Eligibility">
