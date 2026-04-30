@@ -25,7 +25,17 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import AcceptableUse from './pages/AcceptableUse';
 import LeadImport from './pages/LeadImport';
+import SalesDashboard from './pages/SalesDashboard'; 
 
+
+<Route
+  path="/sales"
+  element={
+    <ProtectedRoute>
+      <SalesDashboard />
+    </ProtectedRoute>
+  }
+/>
 export default function App() {
   return (
     <Routes>
@@ -38,6 +48,14 @@ export default function App() {
 <Route path="/privacy" element={<Privacy />} />
 <Route path="/acceptable-use" element={<AcceptableUse />} />
 
+<Route
+  path="/sales"
+  element={
+    <ProtectedRoute>
+      <SalesDashboard />
+    </ProtectedRoute>
+  }
+/>
 <Route
   path="/leads/import"
   element={

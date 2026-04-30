@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';  
 import logo from '../assets/collectflowai-logo.png';
-import { getToken, logout } from '../lib/auth';
+import { getToken, logout } from '../lib/auth'; 
 
 const publicLinks = [
   { to: '/#pricing', label: 'Pricing' },
@@ -24,7 +24,8 @@ const appLinks = [
     { to: '/outbound', label: 'Outbound' },
     { to: '/lead-research', label: 'Lead Research' },
     { to: '/imports/invoices', label: 'Import Invoices' },
-    { to: '/leads/import', label: 'Import Leads' }
+    { to: '/leads/import', label: 'Import Leads' },
+    { to: '/sales', label: 'Sales' }
 ];
 
 function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {

@@ -23,11 +23,11 @@ public class ReportsService : IReportsService
         var activated = await _db.Leads.CountAsync(x => x.Stage =="Activated", ct);
         var paying = await _db.Leads.CountAsync(x => x.Stage =="PayingCustomer", ct);
 
-        var totalRecovered = await _db.Payments.SumAsync(x => (decimal?)x.Amount) ?? 0;
+        var totalRecovered = await _db.Payments
+     .SumAsync(x => (decimal?)x.Amount, ct) ?? 0;
 
-        var totalFees = await _db.RevenueEvents
-            .Where(x => x.EventType == "RecoveryFee")
-            .SumAsync(x => (decimal?)x.Amount) ?? 0;
+        var totalFees = await _db.RecoveryFees
+            .SumAsync(x => (decimal?)x.FeeAmount, ct) ?? 0;
 
         return new SalesFunnelResponse
         {
