@@ -92,5 +92,62 @@ public class ReportsService : IReportsService
             TotalInvoices = invoices.Count,
             TotalPayments = payments.Count
         };
+    } 
+    public async Task<IReadOnlyList<SalesFunnelDailyTrendResponse>> GetSalesFunnelDailyTrendAsync(
+    CancellationToken ct)
+{
+    var today = DateTime.UtcNow.Date;
+    var start = today.AddDays(-6);
+
+    var result = new List<SalesFunnelDailyTrendResponse>();
+
+    for (var date = start; date <= today; date = date.AddDays(1))
+    {
+        var next = date.AddDays(1);
+        var day = DateOnly.FromDateTime(date);
+
+        var emailsSent = await _db.EmailAutomationJobs.CountAsync(x =>
+            x.Status == EmailAutomationStatus.Sent &&
+            x.SentAtUtc >= date &&
+            x.SentAtUtc < next,
+            ct);
+
+        var replies = await _db.Leads.CountAsync(x =>
+            x.Stage >= LeadStage.Replied &&
+            x.LastRepliedAtUtc >= date &&
+            x.LastRepliedAtUtc < next,
+            ct);
+
+        var demos = await _db.Leads.CountAsync(x =>
+            x.Stage >= LeadStage.DemoScheduled &&
+            x.UpdatedAtUtc >= date &&
+            x.UpdatedAtUtc < next,
+            ct);
+
+        var activated = await _db.Leads.CountAsync(x =>
+            x.Stage >= LeadStage.Activated &&
+            x.UpdatedAtUtc >= date &&
+            x.UpdatedAtUtc < next,
+            ct);
+
+        var paying = await _db.Leads.CountAsync(x =>
+            x.Stage == LeadStage.PayingCustomer &&
+            x.UpdatedAtUtc >= date &&
+            x.UpdatedAtUtc < next,
+            ct);
+
+        result.Add(new SalesFunnelDailyTrendResponse
+        {
+            Date = day,
+            EmailsSent = emailsSent,
+            Replies = replies,
+            DemosScheduled = demos,
+            Activated = activated,
+            PayingCustomers = paying,
+            ReplyRate = emailsSent == 0 ? 0 : (double)replies / emailsSent
+        });
     }
+
+    return result;
+}
 }

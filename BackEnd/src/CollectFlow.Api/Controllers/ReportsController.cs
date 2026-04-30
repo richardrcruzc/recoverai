@@ -29,5 +29,10 @@ public class ReportsController : ControllerBase
         var result = await _reportService.GetSalesFunnelAsync(ct);
         return Ok(result);
     }
-
+    [HttpGet("sales-funnel/daily-trend")]
+    public async Task<IActionResult> GetDailyTrend(CancellationToken ct)
+    {
+        var result = await _reportService.GetSalesFunnelDailyTrendAsync(ct);
+        return Ok(result);
+    }
 }
