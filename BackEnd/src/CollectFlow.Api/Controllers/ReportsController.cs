@@ -1,4 +1,5 @@
 ﻿using CollectFlow.Application.Interfaces;
+using CollectFlow.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace CollectFlow.Api.Controllers;
 [Authorize]
 public class ReportsController : ControllerBase
 {
-    private readonly IReportService _reportService;
+    private readonly IReportsService _reportService;
 
-    public ReportsController(IReportService reportService)
+    public ReportsController(IReportsService reportService)
     {
         _reportService = reportService;
     }
@@ -22,4 +23,11 @@ public class ReportsController : ControllerBase
         var result = await _reportService.GetRecoverySummaryAsync(cancellationToken);
         return Ok(result);
     }
+    [HttpGet("sales-funnel")]
+    public async Task<IActionResult> GetFunnel(CancellationToken ct)
+    {
+        var result = await _reportService.GetSalesFunnelAsync(ct);
+        return Ok(result);
+    }
+
 }

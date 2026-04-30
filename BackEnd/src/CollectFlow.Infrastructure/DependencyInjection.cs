@@ -32,7 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IReminderService, ReminderService>();
         services.AddScoped<IPaymentService, PaymentService>();
-        services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IReportsService, ReportsService>();
         services.AddScoped<IScoringService, ScoringService>();
         services.AddScoped<IBillingService, BillingService>();
         services.AddScoped<IPlanLimitService, PlanLimitService>();
