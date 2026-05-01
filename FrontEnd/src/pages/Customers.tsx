@@ -232,7 +232,9 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
             ) : null}
 
             {loading ? (
-              <p className="mt-6 text-slate-600">Loading customers...</p>
+              <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div>
             ) : (
               <div className="mt-6 overflow-x-auto">
                 <table className="w-full text-left text-sm">

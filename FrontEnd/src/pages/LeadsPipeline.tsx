@@ -167,7 +167,9 @@ export default function LeadsPipeline() {
         ) : null}
 
         {loading ? (
-          <p className="mt-8 text-slate-600">Loading leads...</p>
+          <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div>
         ) : (
           <section className="mt-8">
             <div className="flex gap-4 overflow-x-auto pb-4">

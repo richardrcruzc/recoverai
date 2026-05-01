@@ -44,7 +44,9 @@ export default function Billing() {
         ) : null}
 
         {!summary ? (
-          <p className="mt-8 text-slate-600">Loading billing summary...</p>
+         <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div>
         ) : (
           <>
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

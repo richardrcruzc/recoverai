@@ -181,7 +181,9 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
                 disabled={running}
                 className="w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
               >
-                {running ? 'Running...' : 'Run Reminders Now'}
+                {running ? <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div> : 'Run Reminders Now'}
               </button>
 
               <button

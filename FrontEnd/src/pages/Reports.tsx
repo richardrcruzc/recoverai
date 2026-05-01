@@ -17,7 +17,9 @@ export default function Reports() {
     getRecoverySummary().then(setData);
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div>;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">

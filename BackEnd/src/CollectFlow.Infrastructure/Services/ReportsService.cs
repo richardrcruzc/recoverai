@@ -13,7 +13,18 @@ public class ReportsService : IReportsService
     {
         _db = db;
     }
+    private static double SafeRate(int numerator, int denominator)
+    {
+        if (denominator <= 0)
+            return 0;
 
+        var value = (double)numerator / denominator;
+
+        if (double.IsNaN(value) || double.IsInfinity(value))
+            return 0;
+
+        return value;
+    }
     public async Task<SalesFunnelResponse> GetSalesFunnelAsync(CancellationToken ct)
     {
         var leads = await _db.Leads.CountAsync(ct);
@@ -48,10 +59,10 @@ public class ReportsService : IReportsService
             TotalRecovered = totalRecovered,
             TotalFees = totalFees,
 
-            ReplyRate = leads == 0 ? 0 : (double)replied / emailsSent,
-            DemoRate = replied == 0 ? 0 : (double)demos / replied,
-            ActivationRate = demos == 0 ? 0 : (double)activated / demos,
-            ConversionRate = leads == 0 ? 0 : (double)paying / leads,
+            ReplyRate = leads == 0 ? 0 : SafeRate(replied , emailsSent),
+            DemoRate = replied == 0 ? 0 : SafeRate(demos ,replied),
+            ActivationRate = demos == 0 ? 0 : SafeRate(activated , demos),
+            ConversionRate = leads == 0 ? 0 : SafeRate(paying , leads),
             
         };
     }

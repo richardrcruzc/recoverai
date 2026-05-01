@@ -175,7 +175,9 @@ export default function Outbound() {
           <h2 className="text-xl font-semibold">Recent Sends</h2>
 
           {loading ? (
-            <p className="mt-6 text-slate-600">Loading outbound data...</p>
+           <div className="mt-10 flex items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+          </div>
           ) : (
             <div className="mt-6 w-full overflow-x-auto rounded-2xl">
               <table className="min-w-[1100px] w-full text-left text-sm">

@@ -234,7 +234,9 @@ const handleQueueBatch = async () => {
   </div>
 ) : null}
           {loading ? (
-            <p className="mt-6 text-slate-600">Loading jobs...</p>
+            <div className="mt-10 flex items-center justify-center">
+  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
+</div>
           ) : (
             <div className="mt-6 w-full overflow-x-auto rounded-2xl">
               <table className="min-w-[1000px] w-full text-left text-sm">
