@@ -41,16 +41,15 @@ export function getUser(): { email: string; role: string } | null {
 export async function login(email: string, password: string): Promise<boolean> {
   const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: 'POST',
+    credentials: 'include', // 👈 REQUIRED
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
   });
 
   if (!response.ok) {
     return false;
-  }
-
-  const data = (await response.json()) as LoginResult;
-
+  } 
+  const data = (await response.json()) as LoginResult; 
   setToken(data.accessToken);
   sessionStorage.setItem(USER_KEY, JSON.stringify({
     email: data.email,
@@ -61,7 +60,11 @@ export async function login(email: string, password: string): Promise<boolean> {
   return true;
 }
 
-export function logout(): void {
+export async function logout(): Promise<void> {
   sessionStorage.removeItem(TOKEN_KEY);
   sessionStorage.removeItem(USER_KEY);
+  await  fetch(`${API_BASE_URL}/api/auth/logout`, {
+  method: 'POST',
+  credentials: 'include'
+});
 }

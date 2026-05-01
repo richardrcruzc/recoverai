@@ -1,7 +1,11 @@
 import { getToken } from './auth';
 import type { ImportLeadsResponse } from '../types/leadImport';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL is required');
+}
 
 export async function importLeadsCsv(file: File): Promise<ImportLeadsResponse> {
   const token = getToken();
@@ -11,6 +15,7 @@ export async function importLeadsCsv(file: File): Promise<ImportLeadsResponse> {
 
   const response = await fetch(`${API_BASE_URL}/api/leads/import/csv`, {
     method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
     headers: {
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     },

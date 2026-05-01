@@ -1,13 +1,18 @@
 import { getToken } from './auth';
 import type { Lead } from '../types/lead';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL is required');
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -47,6 +52,7 @@ export async function getLeads(): Promise<Lead[]> {
 export async function updateLeadStage(leadId: string, stage: number): Promise<void> {
   await request<void>(`/api/leads/${leadId}/stage`, {
     method: 'PATCH',
+      credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify({ stage })
   });
 }
@@ -54,6 +60,7 @@ export async function updateLeadStage(leadId: string, stage: number): Promise<vo
 export async function addLeadNote(leadId: string, note: string): Promise<void> {
   await request<void>(`/api/leads/${leadId}/note`, {
     method: 'PATCH',
+      credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify(note)
   });
 }

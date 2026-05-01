@@ -1,7 +1,6 @@
 using CollectFlow.Application.DTOs.Auth;
 using CollectFlow.Api.Services;
 using CollectFlow.Application.Interfaces;
-using CollectFlow.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -11,25 +10,72 @@ namespace CollectFlow.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(JwtTokenService jwtTokenService, IAuthService authService) : ControllerBase
+public class AuthController(
+    JwtTokenService jwtTokenService,
+    IAuthService authService) : ControllerBase
 {
+    [HttpGet("debug-cookie")]
+    [AllowAnonymous]
+    public IActionResult DebugCookie()
+    {
+        var cookie = Request.Cookies["cf_auth"];
+
+        return Ok(new
+        {
+            hasCookie = !string.IsNullOrWhiteSpace(cookie),
+            cookieLength = cookie?.Length ?? 0
+        });
+    }
     [EnableRateLimiting("public-forms")]
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequest request,
+        CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(request.Email) ||
+            string.IsNullOrWhiteSpace(request.Password))
+        {
+            return BadRequest(new { message = "Email and password are required." });
+        }
+
         var result = await authService.ValidateCredentialsAsync(
             request.Email,
             request.Password,
             cancellationToken);
 
         if (!result.Success)
+        {
             return Unauthorized(new { message = "Invalid email or password." });
+        }
 
-        var token = jwtTokenService.CreateToken(result.Email, result.Role, result.TenantId);
-        return Ok(token);
+        var token = jwtTokenService.CreateToken(
+            result.Email,
+            result.Role,
+            result.TenantId);
+
+        if (token is null || string.IsNullOrWhiteSpace(token.AccessToken))
+        {
+            return Unauthorized(new { message = "Could not create login session." });
+        }
+
+        Response.Cookies.Append("cf_auth", token.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTimeOffset.UtcNow.AddHours(8),
+            Path = "/"
+        });
+
+        return Ok(new
+        {
+            result.Email,
+            result.Role,
+            result.TenantId,
+            result.FullName
+        });
     }
-
 
     [HttpGet("me")]
     [Authorize]
@@ -54,5 +100,19 @@ public class AuthController(JwtTokenService jwtTokenService, IAuthService authSe
             tenantId,
             authenticated = User.Identity?.IsAuthenticated == true
         });
+    }
+
+    [HttpPost("logout")]
+    [AllowAnonymous]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("cf_auth", new CookieOptions
+        {
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Path = "/"
+        });
+
+        return Ok(new { message = "Logged out." });
     }
 }

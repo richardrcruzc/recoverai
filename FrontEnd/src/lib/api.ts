@@ -24,6 +24,7 @@ async function request<T>(path: string, options?: RequestInit & { authenticated?
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers
   });
 
@@ -53,6 +54,7 @@ async function request<T>(path: string, options?: RequestInit & { authenticated?
 export async function submitLead(values: LeadFormValues): Promise<Lead> {
   return request<Lead>('/api/leads', {
     method: 'POST',
+     credentials: 'include', // 👈 REQUIRED
     authenticated: false,
     body: JSON.stringify(values)
   });
@@ -65,6 +67,7 @@ export async function getLeads(): Promise<Lead[]> {
 export async function updateLeadStatus(id: string, status: string): Promise<void> {
   await request<void>(`/api/leads/${id}/status`, {
     method: 'PATCH',
+     credentials: 'include', // 👈 REQUIRED 
     body: JSON.stringify({ status })
   });
 }

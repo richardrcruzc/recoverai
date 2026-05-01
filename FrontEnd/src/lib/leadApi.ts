@@ -15,6 +15,7 @@ export async function submitLead(values: LeadFormValues): Promise<void> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/leads`, {
       method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values)
     });

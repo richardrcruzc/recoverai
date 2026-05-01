@@ -17,7 +17,7 @@ public class AuthService : IAuthService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<(bool Success, string Email, string Role, Guid TenantId)> ValidateCredentialsAsync(
+    public async Task<(bool Success, string FullName, string Email, string Role, Guid TenantId)> ValidateCredentialsAsync(
         string email,
         string password,
         CancellationToken cancellationToken = default)
@@ -29,16 +29,16 @@ public class AuthService : IAuthService
             .FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
 
         if (user is null || !user.IsActive)
-            return (false, string.Empty, string.Empty, Guid.Empty);
+            return (false, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
         var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
         if (result == PasswordVerificationResult.Failed)
-            return (false, string.Empty, string.Empty, Guid.Empty);
+            return (false, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
         user.LastLoginAtUtc = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return (true, user.Email, user.Role.ToString(), user.TenantId);
+        return (true,user.FullName, user.Email, user.Role.ToString(), user.TenantId);
     }
 }

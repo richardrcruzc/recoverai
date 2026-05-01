@@ -11,6 +11,7 @@ export async function createTenantOnboarding(
 ): Promise<TenantOnboardingResponse> {
   const response = await fetch(`${API_BASE_URL}/api/onboarding/tenant`, {
     method: 'POST',
+    credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json'
     },

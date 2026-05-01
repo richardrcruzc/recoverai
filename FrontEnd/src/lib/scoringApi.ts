@@ -12,6 +12,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -43,10 +44,13 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export async function runScoring(): Promise<RunScoringResponse> {
   return request<RunScoringResponse>('/api/scoring/run', {
-    method: 'POST'
+    method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
   });
 }
 
 export async function getScores(): Promise<InvoiceScore[]> {
-  return request<InvoiceScore[]>('/api/scoring');
+  return request<InvoiceScore[]>('/api/scoring', {
+    credentials: 'include' // 👈 REQUIRED
+  } );
 }

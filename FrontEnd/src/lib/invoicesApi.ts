@@ -7,20 +7,18 @@ if (!API_BASE_URL) {
   throw new Error('VITE_API_BASE_URL is required');
 }
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
+ // const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
-  if (response.status === 401) {
-    localStorage.removeItem('collectflowai_access_token');
-    localStorage.removeItem('collectflowai_user');
+  if (response.status === 401) { 
+    sessionStorage.removeItem('collectflowai_user');
     window.location.href = '/login';
     throw new Error('Session expired. Please log in again.');
   }
@@ -43,12 +41,13 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export async function getInvoices(status?: string): Promise<Invoice[]> {
   const query = status && status !== 'All' ? `?status=${encodeURIComponent(status)}` : '';
   console.log(`Request: ${status || 'All'}`);
-  return request<Invoice[]>(`/api/invoices${query}`);
+  return request<Invoice[]>(`/api/invoices${query}` );
 }
 
 export async function createInvoice(input: CreateInvoiceRequest): Promise<Invoice> {
   return request<Invoice>('/api/invoices', {
-    method: 'POST',
+    method: 'POST', 
+     credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify(input)
   });
 }
@@ -56,7 +55,8 @@ export async function createInvoice(input: CreateInvoiceRequest): Promise<Invoic
 export async function updateInvoiceStatus(id: string, status: string): Promise<Invoice> {
   console.log(`Updating invoice ${id} status to ${status}`);
   return request<Invoice>(`/api/invoices/${id}/status`, {
-    method: 'PATCH',
+    method: 'PATCH', 
+      credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify({ status: Number(status) })
   });
 }

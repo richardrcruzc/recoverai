@@ -9,12 +9,10 @@ if (!API_BASE_URL) {
 }
 
 export async function getRecoverySummary(): Promise<RecoverySummary> {
-  const token = getToken();
+ // const token = getToken();
 
   const res = await fetch(`${API_BASE_URL}/api/reports/recovery-summary`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    credentials: 'include', // 👈 REQUIRED 
   });
 
   if (!res.ok) throw new Error('Failed to load report');
@@ -23,9 +21,7 @@ export async function getRecoverySummary(): Promise<RecoverySummary> {
 }
 export async function getSalesFunnel() {
   const res = await fetch(`${API_BASE_URL}/api/reports/sales-funnel`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`
-    }
+    credentials: 'include', // 👈 REQUIRED 
   });
 
   if (!res.ok) throw new Error('Failed to load funnel');
@@ -35,9 +31,7 @@ export async function getSalesFunnel() {
 
 export async function getSalesFunnelDailyTrend(): Promise<SalesFunnelDailyTrend[]> {
   const res = await fetch(`${API_BASE_URL}/api/reports/sales-funnel/daily-trend`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`
-    }
+    credentials: 'include', // 👈 REQUIRED 
   });
 
   if (!res.ok) throw new Error('Failed to load daily trend');

@@ -1,7 +1,11 @@
 import { getToken } from './auth';
 import type { RunLeadScrapeRequest, RunLeadScrapeResponse } from '../types/leadScraping';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL is required');
+}
 
 export async function runLeadScraping(
   input: RunLeadScrapeRequest
@@ -10,6 +14,7 @@ export async function runLeadScraping(
 
   const response = await fetch(`${API_BASE_URL}/api/lead-scraping/run`, {
     method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {})

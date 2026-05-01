@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import logo from '../assets/collectflowai-logo.png';
-import { getToken, logout } from '../lib/auth'; 
+import { getToken, isAuthenticated, logout } from '../lib/auth'; 
 
 const publicLinks = [
   { to: '/#pricing', label: 'Pricing' },
@@ -187,7 +187,7 @@ function DesktopDropdown({
 
 export default function Header() {
   const navigate = useNavigate();
-  const isLoggedIn = !!getToken();
+  const isLoggedIn = !!isAuthenticated();
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {

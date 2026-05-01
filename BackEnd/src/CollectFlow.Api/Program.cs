@@ -18,12 +18,7 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-//builder.WebHost.UseSentry(o =>
-//{
-//    o.Dsn = "https://www.collectflowai.com/@sentry.io/PROJECT_ID";
-//    o.TracesSampleRate = 0.2;
-//});
+ 
 
 builder.Services.AddRateLimiter(options =>
 {
@@ -52,26 +47,59 @@ var jwtOptions = builder.Configuration
 
 builder.Services.AddSingleton<JwtTokenService>();
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var jwtOptions = builder.Configuration
+        .GetSection("Jwt")
+        .Get<JwtOptions>();
 
-        options.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = jwtOptions?.Issuer ?? string.Empty,
+        ValidAudience = jwtOptions?.Audience ?? string.Empty,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtOptions?.Key ?? string.Empty)),
+
+        ClockSkew = TimeSpan.Zero
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ValidIssuer = jwtOptions.Issuer,
-            ValidAudience = jwtOptions.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtOptions.Key)),
-            ClockSkew = TimeSpan.FromMinutes(2)
-        };
-    });
+            var token = context.Request.Cookies["cf_auth"];
+
+            Console.WriteLine($"COOKIE FOUND: {!string.IsNullOrWhiteSpace(token)}");
+
+            if (!string.IsNullOrEmpty(token))
+                context.Token = token;
+
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("JWT FAILED: " + context.Exception.Message);
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine("JWT CHALLENGE:");
+            Console.WriteLine(context.Error);
+            Console.WriteLine(context.ErrorDescription);
+            return Task.CompletedTask;
+        }
+    };
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -80,16 +108,17 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
     {
-        policy
-            .AllowAnyHeader()
-            .AllowAnyMethod()
+        policy 
             .WithOrigins(
                 "http://localhost:5173",
                 "http://localhost:3000",
                 "http://collectflowai.com",
                 "http://www.collectflowai.com",
                 "https://collectflowai.com",
-                "https://www.collectflowai.com");
+                "https://www.collectflowai.com")
+             .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -165,34 +194,34 @@ app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-RecurringJob.AddOrUpdate<ITenantJobRunner>(
-    "daily-overdue-invoice-reminders",
-    runner => runner.RunReminderJobsForAllTenantsAsync(CancellationToken.None),
-    "0 8 * * *");
+//RecurringJob.AddOrUpdate<ITenantJobRunner>(
+//    "daily-overdue-invoice-reminders",
+//    runner => runner.RunReminderJobsForAllTenantsAsync(CancellationToken.None),
+//    "0 8 * * *");
 
-RecurringJob.AddOrUpdate<IEmailAutomationService>(
-    "email-automation-due-jobs",
-    service => service.RunDueJobsAsync(CancellationToken.None),
-    "*/15 * * * *");
+//RecurringJob.AddOrUpdate<IEmailAutomationService>(
+//    "email-automation-due-jobs",
+//    service => service.RunDueJobsAsync(CancellationToken.None),
+//    "*/15 * * * *");
 
-RecurringJob.AddOrUpdate<ICollectionsEngineService>(
-    "daily-collections-engine",
-    service => service.RunAsync(CancellationToken.None),
-    "0 8 * * *");
+//RecurringJob.AddOrUpdate<ICollectionsEngineService>(
+//    "daily-collections-engine",
+//    service => service.RunAsync(CancellationToken.None),
+//    "0 8 * * *");
 
-RecurringJob.AddOrUpdate<IEmailReplySyncService>(
-    "sync-email-replies",
-    svc => svc.SyncRepliesAsync(CancellationToken.None),
-    "*/5 * * * *");
+//RecurringJob.AddOrUpdate<IEmailReplySyncService>(
+//    "sync-email-replies",
+//    svc => svc.SyncRepliesAsync(CancellationToken.None),
+//    "*/5 * * * *");
 
-RecurringJob.AddOrUpdate<IEmailAutomationService>(
-    "queue-daily-lead-email-batch",
-    service => service.QueueLeadBatchAsync(
-        new QueueLeadBatchRequest
-        {
-            BatchSize = 50
-        },
-        CancellationToken.None),
-    "0 9 * * 1-5");
+//RecurringJob.AddOrUpdate<IEmailAutomationService>(
+//    "queue-daily-lead-email-batch",
+//    service => service.QueueLeadBatchAsync(
+//        new QueueLeadBatchRequest
+//        {
+//            BatchSize = 50
+//        },
+//        CancellationToken.None),
+//    "0 9 * * 1-5");
 
 app.Run();

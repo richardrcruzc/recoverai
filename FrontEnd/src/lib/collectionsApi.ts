@@ -12,6 +12,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -45,7 +46,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export async function runCollectionsEngine(): Promise<RunCollectionsEngineResponse> {
   return request<RunCollectionsEngineResponse>('/api/collections/run', {
-    method: 'POST'
+    method: 'POST',
+     credentials: 'include', // 👈 REQUIRED
   });
 }
 
@@ -56,6 +58,7 @@ export async function getCollectionActions(): Promise<CollectionAction[]> {
 export async function completeCollectionAction(id: string, notes: string): Promise<void> {
   await request<void>(`/api/collections/actions/${id}/complete`, {
     method: 'PATCH',
+     credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify({ notes })
   });
 }

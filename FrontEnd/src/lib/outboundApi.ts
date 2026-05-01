@@ -12,6 +12,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -37,16 +38,21 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getOutboundContacts(): Promise<OutboundContact[]> {
-  return request<OutboundContact[]>('/api/outbound/contacts');
+  return request<OutboundContact[]>('/api/outbound/contacts', {
+    credentials: 'include' // 👈 REQUIRED
+  } );
 }
 
 export async function getOutboundEmailSends(): Promise<OutboundEmailSend[]> {
-  return request<OutboundEmailSend[]>('/api/outbound/sends');
+  return request<OutboundEmailSend[]>('/api/outbound/sends', {
+    credentials: 'include' // 👈 REQUIRED
+  });
 }
 
 export async function sendOutboundCampaign(campaignId: string, limit = 25): Promise<SendCampaignResponse> {
   console.log(`Sending campaign ${campaignId} with limit ${limit}`);
   return request<SendCampaignResponse>(`/api/outbound/campaigns/${campaignId}/send?limit=${limit}`, {
-    method: 'POST'
+    method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
   });
 }

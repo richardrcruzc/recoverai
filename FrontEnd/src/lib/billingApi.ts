@@ -11,6 +11,7 @@ export async function getBillingSummary(): Promise<BillingSummary> {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}/api/billing/summary`, {
+    credentials: 'include', // 👈 REQUIRED
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -27,6 +28,7 @@ export async function startStripeCheckout(): Promise<void> {
 
   const response = await fetch(`${API_BASE_URL}/api/billing/create-checkout-session`, {
     method: 'POST',
+    credentials: 'include', // 👈 REQUIRED
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'

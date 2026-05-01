@@ -12,6 +12,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -44,10 +45,13 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export async function runReminders(input: RunReminderRequest): Promise<RunReminderResponse> {
   return request<RunReminderResponse>('/api/reminders/run', {
     method: 'POST',
+    credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify(input)
   });
 }
 
 export async function getReminderLogs(): Promise<ReminderLog[]> {
-  return request<ReminderLog[]>('/api/reminders/logs');
+  return request<ReminderLog[]>('/api/reminders/logs', {
+    credentials: 'include' // 👈 REQUIRED
+  });
 }

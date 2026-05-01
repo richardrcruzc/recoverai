@@ -12,6 +12,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+     credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -48,6 +49,7 @@ export async function getCustomers(): Promise<Customer[]> {
 export async function createCustomer(input: CreateCustomerRequest): Promise<Customer> {
   return request<Customer>('/api/customers', {
     method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify(input)
   });
 }

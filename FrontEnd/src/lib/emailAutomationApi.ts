@@ -16,6 +16,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+    credentials: 'include', // 👈 REQUIRED
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -41,25 +42,30 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getEmailAutomationJobs(): Promise<EmailAutomationJob[]> {
-  return request<EmailAutomationJob[]>('/api/email-automation/jobs');
+  return request<EmailAutomationJob[]>('/api/email-automation/jobs', {
+    credentials: 'include' // 👈 REQUIRED
+  });
 }
 
 export async function runEmailAutomation(): Promise<RunEmailAutomationResponse> {
   return request<RunEmailAutomationResponse>('/api/email-automation/run', {
-    method: 'POST'
+    method: 'POST',
+     credentials: 'include', // 👈 REQUIRED
   });
 
 }
 
 export async function queueAllLeads(): Promise<{ queued: number }> {
   return request<{ queued: number }>('/api/email-automation/queue-all-leads', {
-    method: 'POST'
+    method: 'POST',
+     credentials: 'include', // 👈 REQUIRED
   });
 }
 
 export async function queueLeadBatch(batchSize = 50): Promise<QueueLeadBatchResponse> {
   return request<QueueLeadBatchResponse>('/api/email-automation/queue-lead-batch', {
     method: 'POST',
+      credentials: 'include', // 👈 REQUIRED
     body: JSON.stringify({ batchSize })
   });
 }
