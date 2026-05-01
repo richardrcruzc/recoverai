@@ -88,8 +88,10 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
     setMessage('');
     setResult(null);
 
+      console.log('Scoring result:', result);
     try {
       const response = await runScoring();
+      console.log('Scoring result:', response);
       setResult(response);
       setMessage('Scoring completed.');
       await loadScores();

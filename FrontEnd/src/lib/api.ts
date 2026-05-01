@@ -50,8 +50,7 @@ async function request<T>(path: string, options?: RequestInit & { authenticated?
 export async function submitLead(values: LeadFormValues): Promise<Lead> {
   return request<Lead>('/api/leads', {
     method: 'POST',
-     credentials: 'include', // 👈 REQUIRED
-    authenticated: false,
+     credentials: 'include', // 👈 REQUIRED 
     body: JSON.stringify(values)
   });
 }

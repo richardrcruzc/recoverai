@@ -1,4 +1,4 @@
-import { getToken } from './auth';
+ 
 import type { InvoiceScore, RunScoringResponse } from '../types/scoring';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -7,20 +7,14 @@ if (!API_BASE_URL) {
   throw new Error('VITE_API_BASE_URL is required');
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
+async function request<T>(path: string, options?: RequestInit): Promise<T> {  
 
-  const response = await fetch(`${API_BASE_URL}${path}`,  {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json'
-    }
-  });
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options}
+    );
 
-  if (response.status === 401) {
-    localStorage.removeItem('collectflowai_access_token');
-    localStorage.removeItem('collectflowai_user');
+  if (response.status === 401) { 
+    sessionStorage.removeItem('collectflowai_user');
     window.location.href = '/login';
     throw new Error('Session expired. Please log in again.');
   }
@@ -48,11 +42,7 @@ export async function runScoring(): Promise<RunScoringResponse> {
 }
 
 export async function getScores(): Promise<InvoiceScore[]> {
-  return request<InvoiceScore[]>('/api/scoring',  {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json'
-    }
-  });
+  return request<InvoiceScore[]>('/api/scoring', {
+    credentials: 'include' // 👈 REQUIRED
+  } );
 }
