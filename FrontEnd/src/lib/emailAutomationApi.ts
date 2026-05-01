@@ -5,7 +5,11 @@ import type {
   QueueLeadBatchResponse
 } from '../types/emailAutomation';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL is required');
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = getToken();

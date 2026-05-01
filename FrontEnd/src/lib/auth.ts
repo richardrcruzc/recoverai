@@ -1,7 +1,11 @@
 const TOKEN_KEY = 'collectflowai_access_token';
 const USER_KEY = 'collectflowai_user';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL is required');
+}
 
 export type LoginResult = {
   accessToken: string;
@@ -11,8 +15,12 @@ export type LoginResult = {
   tenantId: string;
 };
 
+export function setToken(token: string) {
+  sessionStorage.setItem(TOKEN_KEY, token);
+}
+
 export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+  return sessionStorage.getItem(TOKEN_KEY);
 }
 
 export function isAuthenticated(): boolean {
@@ -20,7 +28,7 @@ export function isAuthenticated(): boolean {
 }
 
 export function getUser(): { email: string; role: string } | null {
-  const raw = localStorage.getItem(USER_KEY);
+  const raw = sessionStorage.getItem(USER_KEY);
   if (!raw) return null;
 
   try {
@@ -43,17 +51,17 @@ export async function login(email: string, password: string): Promise<boolean> {
 
   const data = (await response.json()) as LoginResult;
 
-  localStorage.setItem(TOKEN_KEY, data.accessToken);
-  localStorage.setItem(USER_KEY, JSON.stringify({
+  setToken(data.accessToken);
+  sessionStorage.setItem(USER_KEY, JSON.stringify({
     email: data.email,
     role: data.role,
-  tenantId: data.tenantId
+    tenantId: data.tenantId
   }));
 
   return true;
 }
 
 export function logout(): void {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_KEY);
 }

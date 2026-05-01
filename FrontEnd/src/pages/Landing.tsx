@@ -315,3 +315,11 @@ function Step({ number, title, text }: { number: string; title: string; text: st
     </div>
   );
 }
+function Faq({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 className="font-semibold">{question}</h3>
+      <p className="mt-2 leading-7 text-slate-600">{answer}</p>
+    </div>
+  );
+}

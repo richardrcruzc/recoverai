@@ -18,6 +18,9 @@ export default function LeadImport() {
       setError('Select a CSV file first.');
       return;
     }
+    
+    if (!file.name.endsWith('.csv')) throw new Error('CSV only');
+    if (file.size > 2 * 1024 * 1024) throw new Error('Max 2MB');
 
     setImporting(true);
 
