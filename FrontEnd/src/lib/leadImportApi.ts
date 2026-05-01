@@ -1,4 +1,3 @@
-import { getToken } from './auth';
 import type { ImportLeadsResponse } from '../types/leadImport';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -8,17 +7,14 @@ if (!API_BASE_URL) {
 }
 
 export async function importLeadsCsv(file: File): Promise<ImportLeadsResponse> {
-  const token = getToken();
-
+   
   const formData = new FormData();
   formData.append('file', file);
 
   const response = await fetch(`${API_BASE_URL}/api/leads/import/csv`, {
     method: 'POST',
       credentials: 'include', // 👈 REQUIRED
-    headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    },
+     
     body: formData
   });
 

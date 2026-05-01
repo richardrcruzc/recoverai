@@ -15,9 +15,7 @@ export async function importInvoicesCsv(file: File): Promise<ImportInvoicesRespo
 
   const response = await fetch(`${API_BASE_URL}/api/imports/invoices`, {
     method: 'POST',
-    headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    },
+     credentials: 'include',     
     body: formData
   });
 

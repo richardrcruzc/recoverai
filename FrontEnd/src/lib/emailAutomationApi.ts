@@ -1,4 +1,3 @@
-import { getToken } from './auth'; 
 import type {
   EmailAutomationJob,
   RunEmailAutomationResponse,
@@ -12,15 +11,13 @@ if (!API_BASE_URL) {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
+ 
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    credentials: 'include', // 👈 REQUIRED
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
@@ -42,8 +39,12 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getEmailAutomationJobs(): Promise<EmailAutomationJob[]> {
-  return request<EmailAutomationJob[]>('/api/email-automation/jobs', {
-    credentials: 'include' // 👈 REQUIRED
+  return request<EmailAutomationJob[]>('/api/email-automation/jobs',  {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
   });
 }
 

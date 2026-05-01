@@ -16,8 +16,7 @@ export async function runLeadScraping(
     method: 'POST',
       credentials: 'include', // 👈 REQUIRED
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(input)
   });

@@ -1,4 +1,3 @@
-import { getToken } from './auth';
 import type { OutboundContact, OutboundEmailSend, SendCampaignResponse } from '../types/outbound';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -8,15 +7,12 @@ if (!API_BASE_URL) {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-     credentials: 'include', // 👈 REQUIRED
+  
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
@@ -38,14 +34,22 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getOutboundContacts(): Promise<OutboundContact[]> {
-  return request<OutboundContact[]>('/api/outbound/contacts', {
-    credentials: 'include' // 👈 REQUIRED
-  } );
+  return request<OutboundContact[]>('/api/outbound/contacts',  {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function getOutboundEmailSends(): Promise<OutboundEmailSend[]> {
-  return request<OutboundEmailSend[]>('/api/outbound/sends', {
-    credentials: 'include' // 👈 REQUIRED
+  return request<OutboundEmailSend[]>('/api/outbound/sends',  {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
   });
 }
 
@@ -53,6 +57,9 @@ export async function sendOutboundCampaign(campaignId: string, limit = 25): Prom
   console.log(`Sending campaign ${campaignId} with limit ${limit}`);
   return request<SendCampaignResponse>(`/api/outbound/campaigns/${campaignId}/send?limit=${limit}`, {
     method: 'POST',
-      credentials: 'include', // 👈 REQUIRED
+    credentials: 'include', // 👈 REQUIRED
+    headers: {
+      'Content-Type': 'application/json'
+    }
   });
 }

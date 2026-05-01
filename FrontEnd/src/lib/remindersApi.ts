@@ -10,13 +10,11 @@ if (!API_BASE_URL) {
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = getToken();
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-     credentials: 'include', // 👈 REQUIRED
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
@@ -51,7 +49,11 @@ export async function runReminders(input: RunReminderRequest): Promise<RunRemind
 }
 
 export async function getReminderLogs(): Promise<ReminderLog[]> {
-  return request<ReminderLog[]>('/api/reminders/logs', {
-    credentials: 'include' // 👈 REQUIRED
+  return request<ReminderLog[]>('/api/reminders/logs',  {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
   });
 }

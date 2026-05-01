@@ -10,19 +10,16 @@ if (!API_BASE_URL) {
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = getToken();
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-     credentials: 'include', // 👈 REQUIRED
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
-  if (response.status === 401) {
-    localStorage.removeItem('collectflowai_access_token');
-    localStorage.removeItem('collectflowai_user');
+  if (response.status === 401) { 
+    sessionStorage.removeItem('collectflowai_user');
     window.location.href = '/login';
     throw new Error('Session expired. Please log in again.');
   }
@@ -52,7 +49,13 @@ export async function runCollectionsEngine(): Promise<RunCollectionsEngineRespon
 }
 
 export async function getCollectionActions(): Promise<CollectionAction[]> {
-  return request<CollectionAction[]>('/api/collections/actions');
+  return request<CollectionAction[]>('/api/collections/actions' ,{
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function completeCollectionAction(id: string, notes: string): Promise<void> {

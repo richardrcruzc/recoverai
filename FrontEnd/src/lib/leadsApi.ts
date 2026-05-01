@@ -1,4 +1,3 @@
-import { getToken } from './auth';
 import type { Lead } from '../types/lead';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -8,15 +7,12 @@ if (!API_BASE_URL) {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-     credentials: 'include', // 👈 REQUIRED
+  
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
@@ -46,7 +42,13 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getLeads(): Promise<Lead[]> {
-  return request<Lead[]>('/api/leads');
+  return request<Lead[]>('/api/leads', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function updateLeadStage(leadId: string, stage: number): Promise<void> {

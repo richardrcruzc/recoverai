@@ -10,10 +10,11 @@ if (!API_BASE_URL) {
 export async function getBillingSummary(): Promise<BillingSummary> {
   const token = getToken();
 
-  const response = await fetch(`${API_BASE_URL}/api/billing/summary`, {
-    credentials: 'include', // 👈 REQUIRED
+  const response = await fetch(`${API_BASE_URL}/api/billing/summary`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      Authorization: `Bearer ${token}`
+      Accept: 'application/json'
     }
   });
 
@@ -29,8 +30,7 @@ export async function startStripeCheckout(): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/api/billing/create-checkout-session`, {
     method: 'POST',
     credentials: 'include', // 👈 REQUIRED
-    headers: {
-      Authorization: `Bearer ${token}`,
+    headers: { 
       'Content-Type': 'application/json'
     }
   });

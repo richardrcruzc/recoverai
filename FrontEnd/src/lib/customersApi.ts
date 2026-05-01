@@ -1,4 +1,3 @@
-import { getToken } from './auth';
 import type { CreateCustomerRequest, Customer } from '../types/customer';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -8,21 +7,18 @@ if (!API_BASE_URL) {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-     credentials: 'include', // 👈 REQUIRED
+  
+  const response = await fetch(`${API_BASE_URL}${path}`,  {
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {})
+      Accept: 'application/json'
     }
   });
 
   if (response.status === 401) {
-    localStorage.removeItem('collectflowai_access_token');
-    localStorage.removeItem('collectflowai_user');
+    sessionStorage.removeItem('collectflowai_access_token');
+    sessionStorage .removeItem('collectflowai_user');
     window.location.href = '/login';
     throw new Error('Session expired. Please log in again.');
   }
@@ -43,7 +39,13 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getCustomers(): Promise<Customer[]> {
-  return request<Customer[]>('/api/customers');
+  return request<Customer[]>('/api/customers', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function createCustomer(input: CreateCustomerRequest): Promise<Customer> {
