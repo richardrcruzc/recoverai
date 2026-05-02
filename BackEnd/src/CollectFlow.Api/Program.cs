@@ -194,34 +194,34 @@ app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-//RecurringJob.AddOrUpdate<ITenantJobRunner>(
-//    "daily-overdue-invoice-reminders",
-//    runner => runner.RunReminderJobsForAllTenantsAsync(CancellationToken.None),
-//    "0 8 * * *");
+RecurringJob.AddOrUpdate<ITenantJobRunner>(
+    "daily-overdue-invoice-reminders",
+    runner => runner.RunReminderJobsForAllTenantsAsync(CancellationToken.None),
+    "0 8 * * *");
 
-//RecurringJob.AddOrUpdate<IEmailAutomationService>(
-//    "email-automation-due-jobs",
-//    service => service.RunDueJobsAsync(CancellationToken.None),
-//    "*/15 * * * *");
+RecurringJob.AddOrUpdate<IEmailAutomationService>(
+    "email-automation-due-jobs",
+    service => service.RunDueJobsAsync(CancellationToken.None),
+    "*/15 * * * *");
 
-//RecurringJob.AddOrUpdate<ICollectionsEngineService>(
-//    "daily-collections-engine",
-//    service => service.RunAsync(CancellationToken.None),
-//    "0 8 * * *");
+RecurringJob.AddOrUpdate<ICollectionsEngineService>(
+    "daily-collections-engine",
+    service => service.RunAsync(CancellationToken.None),
+    "0 8 * * *");
 
-//RecurringJob.AddOrUpdate<IEmailReplySyncService>(
-//    "sync-email-replies",
-//    svc => svc.SyncRepliesAsync(CancellationToken.None),
-//    "*/5 * * * *");
+RecurringJob.AddOrUpdate<IEmailReplySyncService>(
+    "sync-email-replies",
+    svc => svc.SyncRepliesAsync(CancellationToken.None),
+    "*/5 * * * *");
 
-//RecurringJob.AddOrUpdate<IEmailAutomationService>(
-//    "queue-daily-lead-email-batch",
-//    service => service.QueueLeadBatchAsync(
-//        new QueueLeadBatchRequest
-//        {
-//            BatchSize = 50
-//        },
-//        CancellationToken.None),
-//    "0 9 * * 1-5");
+RecurringJob.AddOrUpdate<IEmailAutomationService>(
+    "queue-daily-lead-email-batch",
+    service => service.QueueLeadBatchAsync(
+        new QueueLeadBatchRequest
+        {
+            BatchSize = 50
+        },
+        CancellationToken.None),
+    "0 9 * * 1-5");
 
 app.Run();
