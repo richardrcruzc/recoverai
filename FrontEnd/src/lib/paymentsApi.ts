@@ -12,10 +12,9 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
-     credentials: 'include', // 👈 REQUIRED
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options?.headers ?? {})
     }
   });
@@ -43,11 +42,23 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export async function getPayments(): Promise<Payment[]> {
-  return request<Payment[]>('/api/payments',{ credentials: 'include' });
+  return request<Payment[]>('/api/payments', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function getPaymentsByInvoice(invoiceId: string): Promise<Payment[]> {
-  return request<Payment[]>(`/api/payments/invoice/${invoiceId}`, { credentials: 'include' });
+  return request<Payment[]>(`/api/payments/invoice/${invoiceId}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
 }
 
 export async function createPayment(input: CreatePaymentRequest): Promise<Payment> {

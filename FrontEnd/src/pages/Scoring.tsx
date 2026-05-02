@@ -87,8 +87,7 @@ const [upgradeMessage, setUpgradeMessage] = useState('');
     setError('');
     setMessage('');
     setResult(null);
-
-      console.log('Scoring result:', result);
+ 
     try {
       const response = await runScoring();
       console.log('Scoring result:', response);
